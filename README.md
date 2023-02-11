@@ -68,7 +68,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About the Project
 
-LLA is a high-level Common Lisp library built on on [BLAS](http://www.netlib.org/blas/) and [LAPACK](http://www.netlib.org/lapack/), but providing a much more abstract interface with the purpose of freeing the user from low-level concerns and reducing the number of bugs in numerical code.
+LLA is a high-level Common Lisp library built on on [BLAS](http://www.netlib.org/blas/) and [LAPACK](http://www.netlib.org/lapack/), but providing a more abstract interface with the purpose of freeing the user from low-level concerns and reducing the number of bugs in numerical code.
 
 
 ### Objectives
@@ -87,7 +87,7 @@ Currently, LLA sources amount to less than 3000 lines of code (not including tes
 
 - Speed is important, but reliability comes first.
 
-Only optimize when necessary, and do extensive testing afterwards. Most of the speed comes from your LAPACK library anyway --- most linear algebra operations are $O(N^\alpha)$ with $\alpha > 1$, frequently $\alpha > 2$. That said, copying to memory is optimized, and in the long run LLA should make use of your implementation's array pinning features (when available). *Currently, direct array sharing is disabled*.
+Only optimize when necessary, and do extensive testing afterwards. Most of the speed comes from your LAPACK library anyway. Most linear algebra operations are $O(N^\alpha)$ with $\alpha > 1$, frequently $\alpha > 2$. That said, copying to memory is optimized, and in the long run LLA should make use of your implementation's array pinning features (when available). *Currently, direct array sharing is disabled*.
 
 ### Built With
 
@@ -149,7 +149,7 @@ MacOS (darwin) has BLAS and LAPACK available by default.  For Linux, use your pa
 
 ## Installation
 
-## Getting the source
+### Getting the source
 
 To make the system accessible to [ASDF](https://common-lisp.net/project/asdf/) (a build facility, similar to `make` in the C world), clone the repository in a directory ASDF knows about.  By default the `common-lisp` directory in your home directory is known. Create this if it doesn't already exist and then:
 
@@ -169,7 +169,7 @@ git clone https://github.com/Lisp-Stat/lla.git
 
 If you have installed the slime ASDF extensions, you can invoke this with a comma (',') from the slime REPL.
 
-## Getting dependencies
+### Getting dependencies
 
 To get the third party systems that LLA depends on, you can use a dependency manager, such as [Quicklisp](https://www.quicklisp.org/beta/) or [CLPM](https://www.clpm.dev/) Once installed, get the dependencies with either of:
 
@@ -230,6 +230,6 @@ Project Link: [https://github.com/lisp-stat/lla](https://github.com/lisp-stat/ll
 
 
 ## Known Issues
-If you are using Emacs with slime on MS Windows, there is a [bug](https://github.com/slime/slime/issues/756) in slime when using CFFI.  The workaround is to switch to the `*inferior-lisp*` emacs buffer and press enter once or twice.  After than, slime will unhang and CFFI will continue to load the BLAS libraries.
+If you are using Emacs with slime on MS Windows, there is a [bug](https://github.com/slime/slime/issues/756) in slime where trying to load a shared library using CFFI will hang slime.  The workaround is to switch to the `*inferior-lisp*` emacs buffer and press enter once or twice.  After than, slime will unhang and CFFI will continue to load the BLAS libraries.
 
 
