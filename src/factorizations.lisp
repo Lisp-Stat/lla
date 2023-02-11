@@ -1,5 +1,5 @@
-;;; -*- Mode:Lisp; Syntax:ANSI-Common-Lisp; Coding:utf-8 -*-
-
+;;; -*- Mode: LISP; Syntax: Ansi-Common-Lisp; Base: 10; Package: LLA -*-
+;;; Copyright (c) 2023 Symbolics Pte. Ltd. All rights reserved.
 (in-package #:lla)
 
 ;;; pivoting mixin
@@ -13,11 +13,11 @@
   (:documentation "Mixin class for objects with pivoting."))
 
 (defun ipiv (object)
-  "Pivot indices, counting from 0, in a format understood by SLICE.
+  "Pivot indices, counting from 0, in a format understood by SELECT.
 Example:
 
    (let+ (((&accessors-r/o lu-l lu-u ipiv) (lu a)))
-     (num= (slice a ipiv) (mm lu-l lu-u) ipiv-inverse t))    ; => T
+     (num= (select a ipiv) (mm lu-l lu-u) ipiv-inverse t))    ; => T
 "
   (let* ((ipiv-internal (ipiv-internal object))
          (length (length ipiv-internal)))
@@ -28,12 +28,12 @@ Example:
                    (rotatef (aref it index) (aref it pivot-index))))))))
 
 (defun ipiv-inverse (object)
-  "Inverted permutation for pivot indices, in a format understood by SLICE.
+  "Inverted permutation for pivot indices, in a format understood by SELECT.
 
 Example:
 
    (let+ (((&accessors-r/o lu-l lu-u ipiv-inverse) (lu a)))
-     (num= a (slice (mm lu-l lu-u) ipiv-inverse t)))        ; => T
+     (num= a (select (mm lu-l lu-u) ipiv-inverse t)))        ; => T
 "
   (let* ((ipiv (ipiv object))
          (n (length ipiv)))
@@ -49,7 +49,7 @@ Example:
     :documentation "matrix storing the transpose of the LU factorization."
     :initarg :lu
     :reader lu-matrix))
-  (:documentation "LU factorization of a matrix with pivoting.  (SLICE A IPIV) is (MM L U), when IPIV is used to obtain the permutation."))
+  (:documentation "LU factorization of a matrix with pivoting.  (SELECT A IPIV) is (MM L U), when IPIV is used to obtain the permutation."))
 
 (defun lu-u (lu)
   "Return the U part of an LU factorization."

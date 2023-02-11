@@ -1,4 +1,6 @@
-(in-package :lla)
+;;; -*- Mode: LISP; Syntax: Ansi-Common-Lisp; Base: 10; Package: LLA -*-
+;;; Copyright (c) 2023 Symbolics Pte. Ltd. All rights reserved.
+(in-package #:lla)
 
 ;;;; Higher level linear algebra functions defined here.
 ;;;
@@ -412,7 +414,7 @@
   "For pseudoinverse, suppressing diagonal elements below TOLERANCE \(if given, otherwise / is just used without any checking."
   (let ((elements (diagonal-matrix-elements diagonal)))
     (diagonal-matrix (map `(simple-array
-                            ,(clnu::elementwise-float-contagion elements) (*))
+                            ,(nu::elementwise-float-contagion elements) (*))
                           (cond
                             ((null tolerance) #'/)
                             ((and (numberp tolerance) (<= 0 tolerance))
@@ -785,11 +787,11 @@ If high relative accuracy is important, set ABSTOL to DLAMCH( 'Safe minimum').  
          (n (aops:nrow d)))
     (mmm (if (= (aops:ncol u) n)
              u
-             (slice u t (cons 0 n)))
+             (select u t (range 0 n)))
          d
          (if (= (aops:nrow vt) n)
              vt
-             (slice vt (cons 0 n) t)))))
+             (select vt (range 0 n) t)))))
 
 ;;; trace
 

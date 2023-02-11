@@ -1,3 +1,4 @@
+;;; -*- Mode: LISP; Syntax: Ansi-Common-Lisp; Base: 10; Package: LLA-TESTS -*-
 (in-package #:lla-tests)
 
 (defsuite blas-suite (tests))

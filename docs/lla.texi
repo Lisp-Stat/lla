@@ -1,0 +1,5004 @@
+\input texinfo
+
+@c lla.texi --- Reference manual
+
+@c Copyright (C) 2019-2023 Steven Nunez
+
+@c This file is part of Lisp Linear Algebra.
+
+@c This program is distributed under the terms of the Microsoft Public
+@c License.
+
+
+@c Commentary:
+
+@c Generated automatically by Declt version 4.0 beta 2 "William Riker"
+@c on Sat Feb 11 16:48:38 2023 GMT+8.
+
+
+@c ====================================================================
+@c Header
+@c ====================================================================
+@c %**start of header
+@setfilename lla.info
+@settitle The Lisp Linear Algebra Reference Manual
+@afourpaper
+@documentencoding UTF-8
+@c %**end of header
+
+
+
+@c ====================================================================
+@c Format Specific Tweaks
+@c ====================================================================
+@tex
+%% Declt uses several Unicode characters to "reveal" blanks. This
+%% works fine in HTML or Info output, but TeX will have problems with
+%% these. The code below translates those characters to something that
+%% TeX can handle.
+
+%% U+23B5 (Bottom Square Bracket), used to reveal white spaces, is
+%% translated to its Computer Modern teletype version.
+\DeclareUnicodeCharacter{23B5}{{\tt\char'040}}
+
+%% U+21B5 (Downwards Arrow With Corner Leftwards), used to reveal
+%% carriage returns, is translated to \hookleftarrow in math mode.
+\DeclareUnicodeCharacter{21B5}{\ensuremath\hookleftarrow}
+
+%% U+21E5 (Rightwards Arrow To Bar), used to reveal tabs, is
+%% translated to something that looks similar, based on a rightarrow
+%% and a vertical bar from the math extension font.
+\DeclareUnicodeCharacter{21E5}{%
+  \ensuremath{\rightarrow\kern-.5em\mathchar\"130C}}
+
+
+%% Declt uses several Unicode characters to replace "fragile" ones in
+%% anchor names and references. These characters are chosen to resemble
+%% the original ones, without interfering with Info syntax. In TeX
+%% however, we can switch them back to the original versions, because
+%% cross-references are done differently. In theory, I think we could do
+%% something similar for HTML output (again, only the Info syntax poses
+%% problems), but I don't know how to do something similar to what's
+%% below.
+
+%% U+2024 (One Dot Leader) replaces periods.
+\DeclareUnicodeCharacter{2024}{.}
+
+%% U+2236 (Ratio) replaces colons.
+\DeclareUnicodeCharacter{2236}{:}
+
+%% U+2768 (Medium Left Parenthesis Ornament) replaces left parenthesis.
+\DeclareUnicodeCharacter{2768}{(}
+
+%% U+2769 (Medium Right Parenthesis Ornament) replaces right parenthesis.
+\DeclareUnicodeCharacter{2769}{)}
+
+%% U+214B (Turned Ampersand) replaces ampersands.
+\DeclareUnicodeCharacter{214B}{&}
+
+%% U+2216 (Set Minus) replaces backslashes.
+\DeclareUnicodeCharacter{2216}{\char"5C}
+
+%% The following ones are already defined in texinfo.tex so we have nothing
+%% more to do:
+%% U+201A (Single Low-9 Quotation Mark) replaces commas.
+%% U+2205 (Empty Set) replaces empty symbol names.
+
+@end tex
+
+
+
+@c ====================================================================
+@c Settings
+@c ====================================================================
+@setchapternewpage odd
+@documentdescription
+The Lisp Linear Algebra Reference Manual, version 0.3.1.
+@end documentdescription
+
+
+
+@c ====================================================================
+@c New Commands
+@c ====================================================================
+
+@c ---------------
+@c Indexing macros
+@c ---------------
+
+@c Packages
+@macro packageindex{name}
+@tpindex \name\
+@tpindex @r{Package, }\name\
+@end macro
+
+@c Systems
+@macro systemindex{name}
+@tpindex \name\
+@tpindex @r{System, }\name\
+@end macro
+
+@c Modules
+@macro moduleindex{name}
+@tpindex @t{\name\}
+@tpindex Module, @t{\name\}
+@end macro
+
+@c Files
+@macro fileindex{name}
+@tpindex @t{\name\}
+@tpindex File, @t{\name\}
+@end macro
+
+@c The following macros are meant to be used within @defxxx environments.
+@c Texinfo performs half the indexing job and we do the other half.
+
+@c Constants
+@macro constantsubindex{name}
+@vindex @r{Constant, }\name\
+@end macro
+
+@c Special variables
+@macro specialsubindex{name}
+@vindex @r{Special Variable, }\name\
+@end macro
+
+@c Symbol macros
+@macro symbolmacrosubindex{name}
+@vindex @r{Symbol Macro, }\name\
+@end macro
+
+@c Slots
+@macro slotsubindex{name}
+@vindex @r{Slot, }\name\
+@end macro
+
+@c Macros
+@macro macrosubindex{name}
+@findex @r{Macro, }\name\
+@end macro
+
+@c Compiler Macros
+@macro compilermacrosubindex{name}
+@findex @r{Compiler Macro, }\name\
+@end macro
+
+@c Functions
+@macro functionsubindex{name}
+@findex @r{Function, }\name\
+@end macro
+
+@c Methods
+@macro methodsubindex{name}
+@findex @r{Method, }\name\
+@end macro
+
+@c Generic Functions
+@macro genericsubindex{name}
+@findex @r{Generic Function, }\name\
+@end macro
+
+@c Setf Expanders
+@macro expandersubindex{name}
+@findex @r{Setf Expander, }\name\
+@end macro
+
+@c Method Combinations
+@macro combinationsubindex{name}
+@findex @r{Method Combination, }\name\
+@end macro
+
+@c Conditions
+@macro conditionsubindex{name}
+@tpindex @r{Condition, }\name\
+@end macro
+
+@c Structures
+@macro structuresubindex{name}
+@tpindex @r{Structure, }\name\
+@end macro
+
+@c Types
+@macro typesubindex{name}
+@tpindex @r{Type, }\name\
+@end macro
+
+@c Classes
+@macro classsubindex{name}
+@tpindex @r{Class, }\name\
+@end macro
+
+
+
+@c ====================================================================
+@c Info Category and Directory
+@c ====================================================================
+@dircategory Common Lisp
+@direntry
+* Lisp Linear Algebra Reference Manual: (lla). The Lisp Linear Algebra Reference Manual.
+@end direntry
+
+
+
+@c ====================================================================
+@c Copying
+@c ====================================================================
+@copying
+@quotation
+Copyright @copyright{} 2019-2023 Steven Nunez
+
+Permission is granted to make and distribute verbatim copies of this
+manual provided the copyright notice and this permission notice are
+preserved on all copies.
+
+@ignore
+Permission is granted to process this file through TeX and print the
+results, provided the printed document carries a copying permission
+notice identical to this one except for the removal of this paragraph
+(this paragraph not being relevant to the printed manual).
+
+@end ignore
+Permission is granted to copy and distribute modified versions of this
+manual under the conditions for verbatim copying, provided also that the
+section entitled ``Copying'' is included exactly as in the original.
+
+Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that this permission notice may be translated as well.
+@end quotation
+@end copying
+
+
+
+@c ====================================================================
+@c Title Page
+@c ====================================================================
+@titlepage
+@title The Lisp Linear Algebra Reference Manual
+@subtitle Lisp Linear Algebra, version 0.3.1
+
+@author Steven Nunez
+
+@page
+@quotation
+This manual was generated automatically by Declt 4.0b2.
+@end quotation
+@vskip 0pt plus 1filll
+@insertcopying
+@end titlepage
+
+
+
+@c ====================================================================
+@c Table of Contents
+@c ====================================================================
+@contents
+
+
+
+@c ====================================================================
+@c Top
+@c ====================================================================
+@ifnottex
+@node Top, Copying, (dir), (dir)
+@top The Lisp Linear Algebra Reference Manual
+This is the Lisp Linear Algebra Reference Manual, version 0.3.1,
+generated automatically by Declt version 4.0b2.
+
+@menu
+* Copying:: The Microsoft Public License
+* Systems:: The systems documentation
+* Files:: The files documentation
+* Packages:: The packages documentation
+* Definitions:: The symbols documentation
+* Indexes:: Concepts, functions, variables and data types
+@end menu
+
+@insertcopying
+@end ifnottex
+
+
+
+@c ====================================================================
+@c Copying
+@c ====================================================================
+@node Copying, Systems, Top, Top
+@unnumbered Copying
+@quotation
+This program is distributed under the terms of the Microsoft Public
+License.
+@end quotation
+
+
+
+@c ====================================================================
+@c Systems
+@c ====================================================================
+@node Systems, Files, Copying, Top
+@chapter Systems
+The main system appears first, followed by any subsystem dependency.
+
+@menu
+* The lla system::
+@end menu
+
+
+@c --------------
+@c The lla system
+@c --------------
+@node The lla system, , Systems, Systems
+@section @t{lla}
+@anchor{❨1❩}@c
+@systemindex{lla}@c
+Lisp Linear Algebra
+@table @strong
+@item Author
+Steven Nunez
+@item License
+ML-PL
+@item Long Description
+LLA is a high-level Common Lisp library built on on BLAS and LAPACK@comma{} but providing a more abstract interface with the purpose of freeing the user from low-level concerns and reducing the number of bugs in numerical code.
+
+There are four main objectives:@*
+
+- Provide a high-level@comma{} user friendly@comma{} interface that hides the details.@*
+- Stay in Lisp and expose the innards of the objects as much as possible.@*
+- Keeping it simple; LLA is only about 3000 lines of code.@*
+- Speed is important@comma{} but reliability comes first.
+@item Version
+0.3.1
+@item Dependencies
+@itemize @bullet
+@item
+@t{anaphora}@: (system).
+@item
+@t{alexandria}@: (system).
+@item
+@t{cffi}@: (system).
+@item
+@t{num-utils}@: (system).
+@item
+@t{select}@: (system).
+@item
+@t{let-plus}@: (system).
+@end itemize
+@item Source
+@ref{❨2❩, , @t{lla.asd}}.
+@item Child Components
+@itemize @bullet
+@item
+@ref{❨3❩, , @t{package.lisp}}@: (file).
+@item
+@ref{❨4❩, , @t{configuration-interface.lisp}}@: (file).
+@item
+@ref{❨5❩, , @t{configuration.lisp}}@: (file).
+@item
+@ref{❨6❩, , @t{libraries.lisp}}@: (file).
+@item
+@ref{❨7❩, , @t{conditions.lisp}}@: (file).
+@item
+@ref{❨8❩, , @t{types.lisp}}@: (file).
+@item
+@ref{❨9❩, , @t{foreign-memory.lisp}}@: (file).
+@item
+@ref{❨10❩, , @t{pinned-array.lisp}}@: (file).
+@item
+@ref{❨11❩, , @t{factorizations.lisp}}@: (file).
+@item
+@ref{❨12❩, , @t{fortran-call.lisp}}@: (file).
+@item
+@ref{❨13❩, , @t{linear-algebra.lisp}}@: (file).
+@item
+@ref{❨14❩, , @t{blas.lisp}}@: (file).
+@end itemize
+@end table
+
+
+
+@c ====================================================================
+@c Files
+@c ====================================================================
+@node Files, Packages, Systems, Top
+@chapter Files
+Files are sorted by type and then listed depth-first from the systems
+components trees.
+
+@menu
+* Lisp files::
+@end menu
+
+
+@c ----------
+@c Lisp files
+@c ----------
+@node Lisp files, , Files, Files
+@section Lisp
+@menu
+* The lla/lla․asd file::
+* The lla/package․lisp file::
+* The lla/configuration-interface․lisp file::
+* The lla/configuration․lisp file::
+* The lla/libraries․lisp file::
+* The lla/conditions․lisp file::
+* The lla/types․lisp file::
+* The lla/foreign-memory․lisp file::
+* The lla/pinned-array․lisp file::
+* The lla/factorizations․lisp file::
+* The lla/fortran-call․lisp file::
+* The lla/linear-algebra․lisp file::
+* The lla/blas․lisp file::
+@end menu
+
+@node The lla/lla․asd file, The lla/package․lisp file, Lisp files, Lisp files
+@subsection @t{lla/lla.asd}
+@anchor{❨2❩}@c
+@fileindex{lla.asd}@c
+@table @strong
+@item Source
+@ref{❨2❩, , @t{lla.asd}}.
+@item Parent Component
+@ref{❨1❩, , @t{lla}}@: (system).
+@item ASDF Systems
+@ref{❨1❩, , @t{lla}}.
+@end table
+
+@node The lla/package․lisp file, The lla/configuration-interface․lisp file, The lla/lla․asd file, Lisp files
+@subsection @t{lla/package.lisp}
+@anchor{❨3❩}@c
+@fileindex{package.lisp}@c
+@table @strong
+@item Source
+@ref{❨2❩, , @t{lla.asd}}.
+@item Parent Component
+@ref{❨1❩, , @t{lla}}@: (system).
+@item Packages
+@ref{❨15❩, , @t{lla}}.
+@end table
+
+@node The lla/configuration-interface․lisp file, The lla/configuration․lisp file, The lla/package․lisp file, Lisp files
+@subsection @t{lla/configuration-interface.lisp}
+@anchor{❨4❩}@c
+@fileindex{configuration-interface.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨3❩, , @t{package.lisp}}@: (file).
+@item Source
+@ref{❨2❩, , @t{lla.asd}}.
+@item Parent Component
+@ref{❨1❩, , @t{lla}}@: (system).
+@item Internals
+@itemize @bullet
+@item
+@ref{❨279❩, , @t{query-configuration}}@: (function).
+@item
+@ref{❨293❩, , @t{set-feature}}@: (function).
+@end itemize
+@end table
+
+@node The lla/configuration․lisp file, The lla/libraries․lisp file, The lla/configuration-interface․lisp file, Lisp files
+@subsection @t{lla/configuration.lisp}
+@anchor{❨5❩}@c
+@fileindex{configuration.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨4❩, , @t{configuration-interface.lisp}}@: (file).
+@item Source
+@ref{❨2❩, , @t{lla.asd}}.
+@item Parent Component
+@ref{❨1❩, , @t{lla}}@: (system).
+@item Internals
+@ref{❨265❩, , @t{default-libraries}}@: (function).
+@end table
+
+@node The lla/libraries․lisp file, The lla/conditions․lisp file, The lla/configuration․lisp file, Lisp files
+@subsection @t{lla/libraries.lisp}
+@anchor{❨6❩}@c
+@fileindex{libraries.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨5❩, , @t{configuration.lisp}}@: (file).
+@item Source
+@ref{❨2❩, , @t{lla.asd}}.
+@item Parent Component
+@ref{❨1❩, , @t{lla}}@: (system).
+@end table
+
+@node The lla/conditions․lisp file, The lla/types․lisp file, The lla/libraries․lisp file, Lisp files
+@subsection @t{lla/conditions.lisp}
+@anchor{❨7❩}@c
+@fileindex{conditions.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨6❩, , @t{libraries.lisp}}@: (file).
+@item Source
+@ref{❨2❩, , @t{lla.asd}}.
+@item Parent Component
+@ref{❨1❩, , @t{lla}}@: (system).
+@item Public Interface
+@itemize @bullet
+@item
+@ref{❨132❩, , @t{*lla-efficiency-warning-array-conversion*}}@: (special variable).
+@item
+@ref{❨75❩, , @t{*lla-efficiency-warning-array-type*}}@: (special variable).
+@item
+@ref{❨105❩, , @t{lapack-error}}@: (condition).
+@item
+@ref{❨133❩, , @t{lapack-failure}}@: (condition).
+@item
+@ref{❨78❩, , @t{lapack-invalid-argument}}@: (condition).
+@item
+@ref{❨128❩, , @t{lapack-singular-matrix}}@: (condition).
+@item
+@ref{❨87❩, , @t{lla-efficiency-warning}}@: (condition).
+@item
+@ref{❨109❩, , @t{lla-efficiency-warning-array-conversion}}@: (condition).
+@item
+@ref{❨91❩, , @t{lla-efficiency-warning-array-type}}@: (condition).
+@item
+@ref{❨98❩, , @t{lla-incompatible-dimensions}}@: (condition).
+@item
+@ref{❨17❩, , @t{lla-internal-error}}@: (condition).
+@item
+@ref{❨106❩, , @t{lla-unhandled-type}}@: (condition).
+@item
+@ref{❨362❩, , @t{print-object}}@: (method).
+@end itemize
+@end table
+
+@node The lla/types․lisp file, The lla/foreign-memory․lisp file, The lla/conditions․lisp file, Lisp files
+@subsection @t{lla/types.lisp}
+@anchor{❨8❩}@c
+@fileindex{types.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨7❩, , @t{conditions.lisp}}@: (file).
+@item Source
+@ref{❨2❩, , @t{lla.asd}}.
+@item Parent Component
+@ref{❨1❩, , @t{lla}}@: (system).
+@item Public Interface
+@itemize @bullet
+@item
+@ref{❨77❩, , @t{lla-complex-double}}@: (type).
+@item
+@ref{❨76❩, , @t{lla-complex-single}}@: (type).
+@item
+@ref{❨99❩, , @t{lla-double}}@: (type).
+@item
+@ref{❨62❩, , @t{lla-integer}}@: (type).
+@item
+@ref{❨108❩, , @t{lla-single}}@: (type).
+@end itemize
+@item Internals
+@itemize @bullet
+@item
+@ref{❨275❩, , @t{+complex-double+}}@: (constant).
+@item
+@ref{❨158❩, , @t{+complex-single+}}@: (constant).
+@item
+@ref{❨179❩, , @t{+double+}}@: (constant).
+@item
+@ref{❨288❩, , @t{+float-types+}}@: (constant).
+@item
+@ref{❨235❩, , @t{+integer+}}@: (constant).
+@item
+@ref{❨224❩, , @t{+internal-types+}}@: (constant).
+@item
+@ref{❨320❩, , @t{+single+}}@: (constant).
+@item
+@ref{❨248❩, , @t{absolute-square-type}}@: (function).
+@item
+@ref{❨258❩, , @t{array-float-type}}@: (function).
+@item
+@ref{❨168❩, , @t{common-float-type}}@: (function).
+@item
+@ref{❨225❩, , @t{complex?}}@: (function).
+@item
+@ref{❨306❩, , @t{epsilon}}@: (function).
+@item
+@ref{❨244❩, , @t{float-type}}@: (type).
+@item
+@ref{❨295❩, , @t{internal-type}}@: (type).
+@item
+@ref{❨247❩, , @t{lisp-type}}@: (function).
+@item
+@ref{❨284❩, , @t{number-float-type}}@: (function).
+@end itemize
+@end table
+
+@node The lla/foreign-memory․lisp file, The lla/pinned-array․lisp file, The lla/types․lisp file, Lisp files
+@subsection @t{lla/foreign-memory.lisp}
+@anchor{❨9❩}@c
+@fileindex{foreign-memory.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨8❩, , @t{types.lisp}}@: (file).
+@item Source
+@ref{❨2❩, , @t{lla.asd}}.
+@item Parent Component
+@ref{❨1❩, , @t{lla}}@: (system).
+@item Internals
+@itemize @bullet
+@item
+@ref{❨259❩, , @t{all-from-specifications%}}@: (function).
+@item
+@ref{❨245❩, , @t{all-to-specifications%}}@: (function).
+@item
+@ref{❨197❩, , @t{array-clause%}}@: (macro).
+@item
+@ref{❨314❩, , @t{copy-array-from-memory}}@: (function).
+@item
+@ref{❨218❩, , @t{copy-array-to-memory}}@: (function).
+@item
+@ref{❨180❩, , @t{create-array-from-memory}}@: (function).
+@item
+@ref{❨240❩, , @t{create-transposed-matrix-from-memory}}@: (function).
+@item
+@ref{❨223❩, , @t{define-foreign-aref}}@: (macro).
+@item
+@ref{❨277❩, , @t{expand-specifications%}}@: (function).
+@item
+@ref{❨198❩, , @t{foreign-size}}@: (function).
+@item
+@ref{❨290❩, , @t{maximum-array-size}}@: (type).
+@item
+@ref{❨287❩, , @t{transpose-matrix-from-memory}}@: (function).
+@item
+@ref{❨305❩, , @t{transpose-matrix-to-memory}}@: (function).
+@item
+@ref{❨186❩, , @t{value-from-memory%}}@: (function).
+@item
+@ref{❨255❩, , @t{value-to-memory%}}@: (function).
+@item
+@ref{❨296❩, , @t{with-fortran-atom}}@: (macro).
+@item
+@ref{❨157❩, , @t{with-fortran-character}}@: (macro).
+@end itemize
+@end table
+
+@node The lla/pinned-array․lisp file, The lla/factorizations․lisp file, The lla/foreign-memory․lisp file, Lisp files
+@subsection @t{lla/pinned-array.lisp}
+@anchor{❨10❩}@c
+@fileindex{pinned-array.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨9❩, , @t{foreign-memory.lisp}}@: (file).
+@item Source
+@ref{❨2❩, , @t{lla.asd}}.
+@item Parent Component
+@ref{❨1❩, , @t{lla}}@: (system).
+@item Internals
+@itemize @bullet
+@item
+@ref{❨233❩, , @t{backing-array}}@: (function).
+@item
+@ref{❨264❩, , @t{shareable-array?}}@: (function).
+@item
+@ref{❨184❩, , @t{with-array-input}}@: (macro).
+@item
+@ref{❨174❩, , @t{with-array-input-output}}@: (macro).
+@item
+@ref{❨173❩, , @t{with-array-output}}@: (macro).
+@item
+@ref{❨276❩, , @t{with-pinned-array}}@: (macro).
+@item
+@ref{❨299❩, , @t{with-work-area}}@: (macro).
+@end itemize
+@end table
+
+@node The lla/factorizations․lisp file, The lla/fortran-call․lisp file, The lla/pinned-array․lisp file, Lisp files
+@subsection @t{lla/factorizations.lisp}
+@anchor{❨11❩}@c
+@fileindex{factorizations.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨10❩, , @t{pinned-array.lisp}}@: (file).
+@item Source
+@ref{❨2❩, , @t{lla.asd}}.
+@item Parent Component
+@ref{❨1❩, , @t{lla}}@: (system).
+@item Public Interface
+@itemize @bullet
+@item
+@ref{❨155❩, , @t{cholesky}}@: (structure).
+@item
+@ref{❨350❩, , @t{e2*}}@: (method).
+@item
+@ref{❨351❩, , @t{e2*}}@: (method).
+@item
+@ref{❨347❩, , @t{e2+}}@: (method).
+@item
+@ref{❨348❩, , @t{e2+}}@: (method).
+@item
+@ref{❨349❩, , @t{e2/}}@: (method).
+@item
+@ref{❨22❩, , @t{hermitian-factorization}}@: (class).
+@item
+@ref{❨63❩, , @t{ipiv}}@: (function).
+@item
+@ref{❨147❩, , @t{ipiv-inverse}}@: (function).
+@item
+@ref{❨36❩, , @t{left-square-root}}@: (generic function).
+@item
+@ref{❨69❩, , @t{lu}}@: (class).
+@item
+@ref{❨93❩, , @t{lu-l}}@: (function).
+@item
+@ref{❨71❩, , @t{lu-u}}@: (function).
+@item
+@ref{❨32❩, , @t{matrix-square-root}}@: (structure).
+@item
+@ref{❨359❩, , @t{print-object}}@: (method).
+@item
+@ref{❨28❩, , @t{qr}}@: (reader method).
+@item
+@ref{❨29❩, , @t{qr}}@: (class).
+@item
+@ref{❨97❩, , @t{qr-r}}@: (function).
+@item
+@ref{❨94❩, , @t{right-square-root}}@: (generic function).
+@item
+@ref{❨149❩, , @t{spectral-factorization}}@: (structure).
+@item
+@ref{❨129❩, , @t{spectral-factorization-w}}@: (reader).
+@item
+@ref{❨130❩, , @t{(setf spectral-factorization-w)}}@: (writer).
+@item
+@ref{❨24❩, , @t{spectral-factorization-z}}@: (reader).
+@item
+@ref{❨25❩, , @t{(setf spectral-factorization-z)}}@: (writer).
+@item
+@ref{❨83❩, , @t{svd}}@: (structure).
+@item
+@ref{❨64❩, , @t{svd-d}}@: (reader).
+@item
+@ref{❨65❩, , @t{(setf svd-d)}}@: (writer).
+@item
+@ref{❨34❩, , @t{svd-u}}@: (reader).
+@item
+@ref{❨35❩, , @t{(setf svd-u)}}@: (writer).
+@item
+@ref{❨88❩, , @t{svd-vt}}@: (reader).
+@item
+@ref{❨89❩, , @t{(setf svd-vt)}}@: (writer).
+@item
+@ref{❨74❩, , @t{xx}}@: (function).
+@end itemize
+@item Internals
+@itemize @bullet
+@item
+@ref{❨312❩, , @t{cholesky-left}}@: (function).
+@item
+@ref{❨313❩, , @t{(setf cholesky-left)}}@: (function).
+@item
+@ref{❨185❩, , @t{cholesky-p}}@: (function).
+@item
+@ref{❨236❩, , @t{copy-cholesky}}@: (function).
+@item
+@ref{❨242❩, , @t{copy-matrix-square-root}}@: (function).
+@item
+@ref{❨311❩, , @t{copy-spectral-factorization}}@: (function).
+@item
+@ref{❨188❩, , @t{copy-svd}}@: (function).
+@item
+@ref{❨318❩, , @t{count-permutations%}}@: (function).
+@item
+@ref{❨187❩, , @t{define-factorization-eops%}}@: (macro).
+@item
+@ref{❨237❩, , @t{define-matrix-square-root-scalar-multiplication}}@: (macro).
+@item
+@ref{❨251❩, , @t{factor}}@: (reader method).
+@item
+@ref{❨317❩, , @t{ipiv-internal}}@: (reader method).
+@item
+@ref{❨189❩, , @t{ipiv-mixin}}@: (class).
+@item
+@ref{❨178❩, , @t{lu-matrix}}@: (reader method).
+@item
+@ref{❨268❩, , @t{make-cholesky}}@: (function).
+@item
+@ref{❨216❩, , @t{make-cholesky%}}@: (function).
+@item
+@ref{❨171❩, , @t{make-matrix-square-root}}@: (function).
+@item
+@ref{❨199❩, , @t{make-spectral-factorization}}@: (function).
+@item
+@ref{❨297❩, , @t{make-svd}}@: (function).
+@item
+@ref{❨321❩, , @t{matrix-square-root-left}}@: (reader).
+@item
+@ref{❨322❩, , @t{(setf matrix-square-root-left)}}@: (writer).
+@item
+@ref{❨234❩, , @t{matrix-square-root-p}}@: (function).
+@item
+@ref{❨285❩, , @t{permutations}}@: (generic function).
+@item
+@ref{❨267❩, , @t{spectral-factorization-p}}@: (function).
+@item
+@ref{❨156❩, , @t{svd-p}}@: (function).
+@item
+@ref{❨220❩, , @t{tau}}@: (reader method).
+@item
+@ref{❨222❩, , @t{(setf tau)}}@: (writer method).
+@end itemize
+@end table
+
+@node The lla/fortran-call․lisp file, The lla/linear-algebra․lisp file, The lla/factorizations․lisp file, Lisp files
+@subsection @t{lla/fortran-call.lisp}
+@anchor{❨12❩}@c
+@fileindex{fortran-call.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨11❩, , @t{factorizations.lisp}}@: (file).
+@item Source
+@ref{❨2❩, , @t{lla.asd}}.
+@item Parent Component
+@ref{❨1❩, , @t{lla}}@: (system).
+@item Public Interface
+@ref{❨80❩, , @t{with-fp-traps-masked}}@: (macro).
+@item Internals
+@itemize @bullet
+@item
+@ref{❨301❩, , @t{@ampchar{}array-in}}@: (macro).
+@item
+@ref{❨243❩, , @t{@ampchar{}array-in/out}}@: (macro).
+@item
+@ref{❨303❩, , @t{@ampchar{}array-out}}@: (macro).
+@item
+@ref{❨246❩, , @t{@ampchar{}atom}}@: (macro).
+@item
+@ref{❨298❩, , @t{@ampchar{}char}}@: (macro).
+@item
+@ref{❨169❩, , @t{@ampchar{}info}}@: (symbol macro).
+@item
+@ref{❨170❩, , @t{@ampchar{}info}}@: (macro).
+@item
+@ref{❨160❩, , @t{@ampchar{}integer}}@: (macro).
+@item
+@ref{❨289❩, , @t{@ampchar{}integers}}@: (macro).
+@item
+@ref{❨191❩, , @t{@ampchar{}new}}@: (macro).
+@item
+@ref{❨302❩, , @t{@ampchar{}work}}@: (macro).
+@item
+@ref{❨319❩, , @t{@ampchar{}work-query}}@: (macro).
+@item
+@ref{❨263❩, , @t{argument-pointer}}@: (reader method).
+@item
+@ref{❨256❩, , @t{argument-pointers}}@: (function).
+@item
+@ref{❨325❩, , @t{arguments-for-cffi}}@: (function).
+@item
+@ref{❨260❩, , @t{assert-single-lapack-info}}@: (function).
+@item
+@ref{❨254❩, , @t{blas-call}}@: (macro).
+@item
+@ref{❨217❩, , @t{blas-lapack-call-form}}@: (function).
+@item
+@ref{❨159❩, , @t{blas-lapack-function-name}}@: (function).
+@item
+@ref{❨309❩, , @t{blas-return-types}}@: (function).
+@item
+@ref{❨323❩, , @t{fortran-argument}}@: (class).
+@item
+@ref{❨315❩, , @t{fortran-argument/new-variable}}@: (function).
+@item
+@ref{❨181❩, , @t{fortran-argument/output}}@: (class).
+@item
+@ref{❨280❩, , @t{fortran-argument/output-initializer-form}}@: (generic function).
+@item
+@ref{❨228❩, , @t{fortran-argument/size}}@: (class).
+@item
+@ref{❨238❩, , @t{fortran-argument/type}}@: (class).
+@item
+@ref{❨226❩, , @t{fortran-atom}}@: (class).
+@item
+@ref{❨161❩, , @t{fortran-character}}@: (class).
+@item
+@ref{❨163❩, , @t{fortran-input-array}}@: (class).
+@item
+@ref{❨249❩, , @t{fortran-input-output-array}}@: (class).
+@item
+@ref{❨192❩, , @t{fortran-output-array}}@: (class).
+@item
+@ref{❨172❩, , @t{fortran-work-area}}@: (class).
+@item
+@ref{❨294❩, , @t{lapack-call}}@: (macro).
+@item
+@ref{❨257❩, , @t{lapack-call-w/query}}@: (macro).
+@item
+@ref{❨230❩, , @t{lapack-info}}@: (class).
+@item
+@ref{❨278❩, , @t{lapack-info-wrap-argument}}@: (function).
+@item
+@ref{❨308❩, , @t{lapack-work-query-area}}@: (class).
+@item
+@ref{❨291❩, , @t{lapack-work-query-size}}@: (class).
+@item
+@ref{❨261❩, , @t{maybe-default-type}}@: (function).
+@item
+@ref{❨183❩, , @t{output-array-form}}@: (function).
+@item
+@ref{❨269❩, , @t{process-form}}@: (generic function).
+@item
+@ref{❨175❩, , @t{process-forms}}@: (function).
+@item
+@ref{❨200❩, , @t{wrap-argument}}@: (generic function).
+@item
+@ref{❨300❩, , @t{wrap-arguments}}@: (function).
+@end itemize
+@end table
+
+@node The lla/linear-algebra․lisp file, The lla/blas․lisp file, The lla/fortran-call․lisp file, Lisp files
+@subsection @t{lla/linear-algebra.lisp}
+@anchor{❨13❩}@c
+@fileindex{linear-algebra.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨12❩, , @t{fortran-call.lisp}}@: (file).
+@item Source
+@ref{❨2❩, , @t{lla.asd}}.
+@item Parent Component
+@ref{❨1❩, , @t{lla}}@: (system).
+@item Public Interface
+@itemize @bullet
+@item
+@ref{❨346❩, , @t{as-array}}@: (method).
+@item
+@ref{❨360❩, , @t{as-array}}@: (method).
+@item
+@ref{❨365❩, , @t{as-array}}@: (method).
+@item
+@ref{❨153❩, , @t{cholesky}}@: (generic function).
+@item
+@ref{❨146❩, , @t{det}}@: (function).
+@item
+@ref{❨104❩, , @t{eigenvalues}}@: (function).
+@item
+@ref{❨20❩, , @t{hermitian-factorization}}@: (generic function).
+@item
+@ref{❨137❩, , @t{invert}}@: (generic function).
+@item
+@ref{❨72❩, , @t{invert-xx}}@: (generic function).
+@item
+@ref{❨135❩, , @t{least-squares}}@: (function).
+@item
+@ref{❨37❩, , @t{left-square-root}}@: (method).
+@item
+@ref{❨38❩, , @t{left-square-root}}@: (method).
+@item
+@ref{❨100❩, , @t{logdet}}@: (generic function).
+@item
+@ref{❨67❩, , @t{lu}}@: (generic function).
+@item
+@ref{❨44❩, , @t{mm}}@: (generic function).
+@item
+@ref{❨16❩, , @t{mmm}}@: (function).
+@item
+@ref{❨124❩, , @t{outer}}@: (generic function).
+@item
+@ref{❨27❩, , @t{qr}}@: (method).
+@item
+@ref{❨112❩, , @t{solve}}@: (generic function).
+@item
+@ref{❨148❩, , @t{spectral-factorization}}@: (function).
+@item
+@ref{❨81❩, , @t{svd}}@: (generic function).
+@item
+@ref{❨40❩, , @t{tr}}@: (generic function).
+@end itemize
+@item Internals
+@itemize @bullet
+@item
+@ref{❨307❩, , @t{diagonal-log-sum%}}@: (function).
+@item
+@ref{❨304❩, , @t{dimensions-as-matrix}}@: (function).
+@item
+@ref{❨241❩, , @t{invert-triangular%}}@: (function).
+@item
+@ref{❨176❩, , @t{last-rows-ss}}@: (function).
+@item
+@ref{❨252❩, , @t{least-squares-qr}}@: (function).
+@item
+@ref{❨292❩, , @t{log-with-sign%}}@: (macro).
+@item
+@ref{❨310❩, , @t{mm-hermitian%}}@: (function).
+@item
+@ref{❨253❩, , @t{sum-diagonal%}}@: (function).
+@item
+@ref{❨266❩, , @t{trsm%}}@: (function).
+@end itemize
+@end table
+
+@node The lla/blas․lisp file, , The lla/linear-algebra․lisp file, Lisp files
+@subsection @t{lla/blas.lisp}
+@anchor{❨14❩}@c
+@fileindex{blas.lisp}@c
+@table @strong
+@item Dependency
+@ref{❨13❩, , @t{linear-algebra.lisp}}@: (file).
+@item Source
+@ref{❨2❩, , @t{lla.asd}}.
+@item Parent Component
+@ref{❨1❩, , @t{lla}}@: (system).
+@item Public Interface
+@itemize @bullet
+@item
+@ref{❨123❩, , @t{asum}}@: (function).
+@item
+@ref{❨136❩, , @t{axpy!}}@: (function).
+@item
+@ref{❨131❩, , @t{copy!}}@: (function).
+@item
+@ref{❨19❩, , @t{dot}}@: (function).
+@item
+@ref{❨90❩, , @t{gemm!}}@: (function).
+@item
+@ref{❨152❩, , @t{nrm2}}@: (function).
+@item
+@ref{❨66❩, , @t{scal!}}@: (function).
+@end itemize
+@end table
+
+
+
+@c ====================================================================
+@c Packages
+@c ====================================================================
+@node Packages, Definitions, Files, Top
+@chapter Packages
+Packages are listed by definition order.
+
+@menu
+* The lla package::
+@end menu
+
+
+@c ---------------
+@c The lla package
+@c ---------------
+@node The lla package, , Packages, Packages
+@section @t{lla}
+@anchor{❨15❩}@c
+@packageindex{lla}@c
+@table @strong
+@item Source
+@ref{❨3❩, , @t{package.lisp}}.
+@item Use List
+@itemize @bullet
+@item
+@t{alexandria}.
+@item
+@t{anaphora}.
+@item
+@t{cffi}.
+@item
+@t{common-lisp}.
+@item
+@t{let-plus}.
+@item
+@t{num-utils}.
+@item
+@t{select}.
+@end itemize
+@item Used By List
+@t{ls-user}.
+@item Public Interface
+@itemize @bullet
+@item
+@ref{❨132❩, , @t{*lla-efficiency-warning-array-conversion*}}@: (special variable).
+@item
+@ref{❨75❩, , @t{*lla-efficiency-warning-array-type*}}@: (special variable).
+@item
+@ref{❨123❩, , @t{asum}}@: (function).
+@item
+@ref{❨136❩, , @t{axpy!}}@: (function).
+@item
+@ref{❨153❩, , @t{cholesky}}@: (generic function).
+@item
+@ref{❨155❩, , @t{cholesky}}@: (structure).
+@item
+@ref{❨131❩, , @t{copy!}}@: (function).
+@item
+@ref{❨146❩, , @t{det}}@: (function).
+@item
+@ref{❨19❩, , @t{dot}}@: (function).
+@item
+@ref{❨104❩, , @t{eigenvalues}}@: (function).
+@item
+@ref{❨90❩, , @t{gemm!}}@: (function).
+@item
+@ref{❨20❩, , @t{hermitian-factorization}}@: (generic function).
+@item
+@ref{❨22❩, , @t{hermitian-factorization}}@: (class).
+@item
+@ref{❨137❩, , @t{invert}}@: (generic function).
+@item
+@ref{❨72❩, , @t{invert-xx}}@: (generic function).
+@item
+@ref{❨63❩, , @t{ipiv}}@: (function).
+@item
+@ref{❨147❩, , @t{ipiv-inverse}}@: (function).
+@item
+@ref{❨105❩, , @t{lapack-error}}@: (condition).
+@item
+@ref{❨133❩, , @t{lapack-failure}}@: (condition).
+@item
+@ref{❨78❩, , @t{lapack-invalid-argument}}@: (condition).
+@item
+@ref{❨128❩, , @t{lapack-singular-matrix}}@: (condition).
+@item
+@ref{❨135❩, , @t{least-squares}}@: (function).
+@item
+@ref{❨36❩, , @t{left-square-root}}@: (generic function).
+@item
+@ref{❨77❩, , @t{lla-complex-double}}@: (type).
+@item
+@ref{❨76❩, , @t{lla-complex-single}}@: (type).
+@item
+@ref{❨99❩, , @t{lla-double}}@: (type).
+@item
+@ref{❨87❩, , @t{lla-efficiency-warning}}@: (condition).
+@item
+@ref{❨109❩, , @t{lla-efficiency-warning-array-conversion}}@: (condition).
+@item
+@ref{❨91❩, , @t{lla-efficiency-warning-array-type}}@: (condition).
+@item
+@ref{❨98❩, , @t{lla-incompatible-dimensions}}@: (condition).
+@item
+@ref{❨62❩, , @t{lla-integer}}@: (type).
+@item
+@ref{❨17❩, , @t{lla-internal-error}}@: (condition).
+@item
+@ref{❨108❩, , @t{lla-single}}@: (type).
+@item
+@ref{❨106❩, , @t{lla-unhandled-type}}@: (condition).
+@item
+@ref{❨100❩, , @t{logdet}}@: (generic function).
+@item
+@ref{❨67❩, , @t{lu}}@: (generic function).
+@item
+@ref{❨69❩, , @t{lu}}@: (class).
+@item
+@ref{❨93❩, , @t{lu-l}}@: (function).
+@item
+@ref{❨71❩, , @t{lu-u}}@: (function).
+@item
+@ref{❨32❩, , @t{matrix-square-root}}@: (structure).
+@item
+@ref{❨44❩, , @t{mm}}@: (generic function).
+@item
+@ref{❨16❩, , @t{mmm}}@: (function).
+@item
+@ref{❨152❩, , @t{nrm2}}@: (function).
+@item
+@ref{❨124❩, , @t{outer}}@: (generic function).
+@item
+@ref{❨26❩, , @t{qr}}@: (generic function).
+@item
+@ref{❨29❩, , @t{qr}}@: (class).
+@item
+@ref{❨97❩, , @t{qr-r}}@: (function).
+@item
+@ref{❨94❩, , @t{right-square-root}}@: (generic function).
+@item
+@ref{❨66❩, , @t{scal!}}@: (function).
+@item
+@ref{❨112❩, , @t{solve}}@: (generic function).
+@item
+@ref{❨148❩, , @t{spectral-factorization}}@: (function).
+@item
+@ref{❨149❩, , @t{spectral-factorization}}@: (structure).
+@item
+@ref{❨129❩, , @t{spectral-factorization-w}}@: (reader).
+@item
+@ref{❨130❩, , @t{(setf spectral-factorization-w)}}@: (writer).
+@item
+@ref{❨24❩, , @t{spectral-factorization-z}}@: (reader).
+@item
+@ref{❨25❩, , @t{(setf spectral-factorization-z)}}@: (writer).
+@item
+@ref{❨81❩, , @t{svd}}@: (generic function).
+@item
+@ref{❨83❩, , @t{svd}}@: (structure).
+@item
+@ref{❨64❩, , @t{svd-d}}@: (reader).
+@item
+@ref{❨65❩, , @t{(setf svd-d)}}@: (writer).
+@item
+@ref{❨34❩, , @t{svd-u}}@: (reader).
+@item
+@ref{❨35❩, , @t{(setf svd-u)}}@: (writer).
+@item
+@ref{❨88❩, , @t{svd-vt}}@: (reader).
+@item
+@ref{❨89❩, , @t{(setf svd-vt)}}@: (writer).
+@item
+@ref{❨40❩, , @t{tr}}@: (generic function).
+@item
+@ref{❨80❩, , @t{with-fp-traps-masked}}@: (macro).
+@item
+@ref{❨74❩, , @t{xx}}@: (function).
+@end itemize
+@item Internals
+@itemize @bullet
+@item
+@ref{❨301❩, , @t{@ampchar{}array-in}}@: (macro).
+@item
+@ref{❨243❩, , @t{@ampchar{}array-in/out}}@: (macro).
+@item
+@ref{❨303❩, , @t{@ampchar{}array-out}}@: (macro).
+@item
+@ref{❨246❩, , @t{@ampchar{}atom}}@: (macro).
+@item
+@ref{❨298❩, , @t{@ampchar{}char}}@: (macro).
+@item
+@ref{❨169❩, , @t{@ampchar{}info}}@: (symbol macro).
+@item
+@ref{❨170❩, , @t{@ampchar{}info}}@: (macro).
+@item
+@ref{❨160❩, , @t{@ampchar{}integer}}@: (macro).
+@item
+@ref{❨289❩, , @t{@ampchar{}integers}}@: (macro).
+@item
+@ref{❨191❩, , @t{@ampchar{}new}}@: (macro).
+@item
+@ref{❨302❩, , @t{@ampchar{}work}}@: (macro).
+@item
+@ref{❨319❩, , @t{@ampchar{}work-query}}@: (macro).
+@item
+@ref{❨275❩, , @t{+complex-double+}}@: (constant).
+@item
+@ref{❨158❩, , @t{+complex-single+}}@: (constant).
+@item
+@ref{❨179❩, , @t{+double+}}@: (constant).
+@item
+@ref{❨288❩, , @t{+float-types+}}@: (constant).
+@item
+@ref{❨235❩, , @t{+integer+}}@: (constant).
+@item
+@ref{❨224❩, , @t{+internal-types+}}@: (constant).
+@item
+@ref{❨320❩, , @t{+single+}}@: (constant).
+@item
+@ref{❨248❩, , @t{absolute-square-type}}@: (function).
+@item
+@ref{❨259❩, , @t{all-from-specifications%}}@: (function).
+@item
+@ref{❨245❩, , @t{all-to-specifications%}}@: (function).
+@item
+@ref{❨262❩, , @t{argument-pointer}}@: (generic reader).
+@item
+@ref{❨256❩, , @t{argument-pointers}}@: (function).
+@item
+@ref{❨325❩, , @t{arguments-for-cffi}}@: (function).
+@item
+@ref{❨197❩, , @t{array-clause%}}@: (macro).
+@item
+@ref{❨258❩, , @t{array-float-type}}@: (function).
+@item
+@ref{❨260❩, , @t{assert-single-lapack-info}}@: (function).
+@item
+@ref{❨233❩, , @t{backing-array}}@: (function).
+@item
+@ref{❨254❩, , @t{blas-call}}@: (macro).
+@item
+@ref{❨217❩, , @t{blas-lapack-call-form}}@: (function).
+@item
+@ref{❨159❩, , @t{blas-lapack-function-name}}@: (function).
+@item
+@ref{❨309❩, , @t{blas-return-types}}@: (function).
+@item
+@ref{❨312❩, , @t{cholesky-left}}@: (function).
+@item
+@ref{❨313❩, , @t{(setf cholesky-left)}}@: (function).
+@item
+@ref{❨185❩, , @t{cholesky-p}}@: (function).
+@item
+@ref{❨168❩, , @t{common-float-type}}@: (function).
+@item
+@ref{❨225❩, , @t{complex?}}@: (function).
+@item
+@ref{❨314❩, , @t{copy-array-from-memory}}@: (function).
+@item
+@ref{❨218❩, , @t{copy-array-to-memory}}@: (function).
+@item
+@ref{❨236❩, , @t{copy-cholesky}}@: (function).
+@item
+@ref{❨242❩, , @t{copy-matrix-square-root}}@: (function).
+@item
+@ref{❨311❩, , @t{copy-spectral-factorization}}@: (function).
+@item
+@ref{❨188❩, , @t{copy-svd}}@: (function).
+@item
+@ref{❨318❩, , @t{count-permutations%}}@: (function).
+@item
+@ref{❨180❩, , @t{create-array-from-memory}}@: (function).
+@item
+@ref{❨240❩, , @t{create-transposed-matrix-from-memory}}@: (function).
+@item
+@ref{❨265❩, , @t{default-libraries}}@: (function).
+@item
+@ref{❨187❩, , @t{define-factorization-eops%}}@: (macro).
+@item
+@ref{❨223❩, , @t{define-foreign-aref}}@: (macro).
+@item
+@ref{❨237❩, , @t{define-matrix-square-root-scalar-multiplication}}@: (macro).
+@item
+@ref{❨307❩, , @t{diagonal-log-sum%}}@: (function).
+@item
+@ref{❨304❩, , @t{dimensions-as-matrix}}@: (function).
+@item
+@ref{❨306❩, , @t{epsilon}}@: (function).
+@item
+@ref{❨277❩, , @t{expand-specifications%}}@: (function).
+@item
+@ref{❨250❩, , @t{factor}}@: (generic reader).
+@item
+@ref{❨244❩, , @t{float-type}}@: (type).
+@item
+@ref{❨198❩, , @t{foreign-size}}@: (function).
+@item
+@ref{❨323❩, , @t{fortran-argument}}@: (class).
+@item
+@ref{❨315❩, , @t{fortran-argument/new-variable}}@: (function).
+@item
+@ref{❨181❩, , @t{fortran-argument/output}}@: (class).
+@item
+@ref{❨280❩, , @t{fortran-argument/output-initializer-form}}@: (generic function).
+@item
+@ref{❨228❩, , @t{fortran-argument/size}}@: (class).
+@item
+@ref{❨238❩, , @t{fortran-argument/type}}@: (class).
+@item
+@ref{❨226❩, , @t{fortran-atom}}@: (class).
+@item
+@ref{❨161❩, , @t{fortran-character}}@: (class).
+@item
+@ref{❨163❩, , @t{fortran-input-array}}@: (class).
+@item
+@ref{❨249❩, , @t{fortran-input-output-array}}@: (class).
+@item
+@ref{❨192❩, , @t{fortran-output-array}}@: (class).
+@item
+@ref{❨172❩, , @t{fortran-work-area}}@: (class).
+@item
+@ref{❨295❩, , @t{internal-type}}@: (type).
+@item
+@ref{❨241❩, , @t{invert-triangular%}}@: (function).
+@item
+@ref{❨316❩, , @t{ipiv-internal}}@: (generic reader).
+@item
+@ref{❨189❩, , @t{ipiv-mixin}}@: (class).
+@item
+@ref{❨294❩, , @t{lapack-call}}@: (macro).
+@item
+@ref{❨257❩, , @t{lapack-call-w/query}}@: (macro).
+@item
+@ref{❨230❩, , @t{lapack-info}}@: (class).
+@item
+@ref{❨278❩, , @t{lapack-info-wrap-argument}}@: (function).
+@item
+@ref{❨308❩, , @t{lapack-work-query-area}}@: (class).
+@item
+@ref{❨291❩, , @t{lapack-work-query-size}}@: (class).
+@item
+@ref{❨176❩, , @t{last-rows-ss}}@: (function).
+@item
+@ref{❨252❩, , @t{least-squares-qr}}@: (function).
+@item
+@ref{❨247❩, , @t{lisp-type}}@: (function).
+@item
+@ref{❨292❩, , @t{log-with-sign%}}@: (macro).
+@item
+@ref{❨177❩, , @t{lu-matrix}}@: (generic reader).
+@item
+@ref{❨268❩, , @t{make-cholesky}}@: (function).
+@item
+@ref{❨216❩, , @t{make-cholesky%}}@: (function).
+@item
+@ref{❨171❩, , @t{make-matrix-square-root}}@: (function).
+@item
+@ref{❨199❩, , @t{make-spectral-factorization}}@: (function).
+@item
+@ref{❨297❩, , @t{make-svd}}@: (function).
+@item
+@ref{❨321❩, , @t{matrix-square-root-left}}@: (reader).
+@item
+@ref{❨322❩, , @t{(setf matrix-square-root-left)}}@: (writer).
+@item
+@ref{❨234❩, , @t{matrix-square-root-p}}@: (function).
+@item
+@ref{❨290❩, , @t{maximum-array-size}}@: (type).
+@item
+@ref{❨261❩, , @t{maybe-default-type}}@: (function).
+@item
+@ref{❨310❩, , @t{mm-hermitian%}}@: (function).
+@item
+@ref{❨284❩, , @t{number-float-type}}@: (function).
+@item
+@ref{❨183❩, , @t{output-array-form}}@: (function).
+@item
+@ref{❨285❩, , @t{permutations}}@: (generic function).
+@item
+@ref{❨269❩, , @t{process-form}}@: (generic function).
+@item
+@ref{❨175❩, , @t{process-forms}}@: (function).
+@item
+@ref{❨279❩, , @t{query-configuration}}@: (function).
+@item
+@ref{❨293❩, , @t{set-feature}}@: (function).
+@item
+@ref{❨264❩, , @t{shareable-array?}}@: (function).
+@item
+@ref{❨267❩, , @t{spectral-factorization-p}}@: (function).
+@item
+@ref{❨253❩, , @t{sum-diagonal%}}@: (function).
+@item
+@ref{❨156❩, , @t{svd-p}}@: (function).
+@item
+@ref{❨219❩, , @t{tau}}@: (generic reader).
+@item
+@ref{❨221❩, , @t{(setf tau)}}@: (generic writer).
+@item
+@ref{❨287❩, , @t{transpose-matrix-from-memory}}@: (function).
+@item
+@ref{❨305❩, , @t{transpose-matrix-to-memory}}@: (function).
+@item
+@ref{❨266❩, , @t{trsm%}}@: (function).
+@item
+@ref{❨186❩, , @t{value-from-memory%}}@: (function).
+@item
+@ref{❨255❩, , @t{value-to-memory%}}@: (function).
+@item
+@ref{❨184❩, , @t{with-array-input}}@: (macro).
+@item
+@ref{❨174❩, , @t{with-array-input-output}}@: (macro).
+@item
+@ref{❨173❩, , @t{with-array-output}}@: (macro).
+@item
+@ref{❨296❩, , @t{with-fortran-atom}}@: (macro).
+@item
+@ref{❨157❩, , @t{with-fortran-character}}@: (macro).
+@item
+@ref{❨276❩, , @t{with-pinned-array}}@: (macro).
+@item
+@ref{❨299❩, , @t{with-work-area}}@: (macro).
+@item
+@ref{❨200❩, , @t{wrap-argument}}@: (generic function).
+@item
+@ref{❨300❩, , @t{wrap-arguments}}@: (function).
+@end itemize
+@end table
+
+
+
+@c ====================================================================
+@c Definitions
+@c ====================================================================
+@node Definitions, Indexes, Packages, Top
+@chapter Definitions
+Definitions are sorted by export status, category, package, and then by
+lexicographic order.
+
+@menu
+* Public Interface::
+* Internals::
+@end menu
+
+
+@c ----------------
+@c Public Interface
+@c ----------------
+@node Public Interface, Internals, Definitions, Definitions
+@section Public Interface
+@menu
+* Public special variables::
+* Public macros::
+* Public ordinary functions::
+* Public generic functions::
+* Public standalone methods::
+* Public conditions::
+* Public structures::
+* Public classes::
+* Public types::
+@end menu
+
+@node Public special variables, Public macros, Public Interface, Public Interface
+@subsection Special variables
+@defvr {Special Variable} {*lla-efficiency-warning-array-conversion*}
+@anchor{❨132❩}@c
+@specialsubindex{*lla-efficiency-warning-array-conversion*}@c
+Toggles whether conversion of array elements to another type when used with foreign functions raises an LLA-EFFICIENCY-WARNING-ARRAY-CONVERSION warning.@*
+
+Effective only when LLA was loaded @ampchar{} compiled with the appropriate settings in CL-USER::*LLA-CONFIGURATION*.  See the documentation on configuration in the README.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨7❩, , @t{conditions.lisp}}.
+@end table
+@end defvr
+@defvr {Special Variable} {*lla-efficiency-warning-array-type*}
+@anchor{❨75❩}@c
+@specialsubindex{*lla-efficiency-warning-array-type*}@c
+Toggles whether arrays with types not recognized as LLA types raise an LLA-EFFICIENCY-WARNING-ARRAY-TYPE warning.@*
+
+Effective only when LLA was loaded @ampchar{} compiled with the appropriate settings in CL-USER::*LLA-CONFIGURATION*.  See the documentation on configuration in the README.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨7❩, , @t{conditions.lisp}}.
+@end table
+@end defvr
+
+@node Public macros, Public ordinary functions, Public special variables, Public Interface
+@subsection Macros
+@deffn {Macro} {with-fp-traps-masked} (&body body)
+@anchor{❨80❩}@c
+@macrosubindex{with-fp-traps-masked}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@end table
+@end deffn
+
+@node Public ordinary functions, Public generic functions, Public macros, Public Interface
+@subsection Ordinary functions
+@deffn {Function} {asum} (x &key n incx)
+@anchor{❨123❩}@c
+@functionsubindex{asum}@c
+Return the L1 norm of X.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨14❩, , @t{blas.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {axpy!} (alpha x y &key n incx incy)
+@anchor{❨136❩}@c
+@functionsubindex{axpy!}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨14❩, , @t{blas.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {copy!} (x y &key n incx incy)
+@anchor{❨131❩}@c
+@functionsubindex{copy!}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨14❩, , @t{blas.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {det} (matrix)
+@anchor{❨146❩}@c
+@functionsubindex{det}@c
+Determinant of a matrix.  If you need the log of this@comma{} use LOGDET
+  directly.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {dot} (x y &key n incx incy)
+@anchor{❨19❩}@c
+@functionsubindex{dot}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨14❩, , @t{blas.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {eigenvalues} (a &key abstol)
+@anchor{❨104❩}@c
+@functionsubindex{eigenvalues}@c
+Return the eigenvalues of A.  See the documentation of
+SPECTRAL-FACTORIZATION about ABSTOL.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {gemm!} (alpha a b beta c &key transpose-a? transpose-b? m n k lda ldb ldc)
+@anchor{❨90❩}@c
+@functionsubindex{gemm!}@c
+Basically C = ALPHA * A' * B' + BETA * C. A' is A or its transpose depending on TRANSPOSE-A?. B' is B or its transpose depending on TRANSPOSE-B?. Returns C.
+
+A' is an MxK matrix. B' is a KxN matrix. C is an MxN matrix.@*
+
+LDA is the width of the matrix A (not of A'). If A is not transposed@comma{} then K <= LDA@comma{} if it's transposed then M <= LDA.@*
+
+LDB is the width of the matrix B (not of B'). If B is not transposed@comma{} then N <= LDB@comma{} if it's transposed then K <= LDB.@*
+
+In the example below M=3@comma{} N=2@comma{} K=5@comma{} LDA=6@comma{} LDB=3@comma{} LDC=4. The cells marked with + do not feature in the calculation.@*
+
+           N@*
+          --+@*
+          --+@*
+        K -B+@*
+          --+@*
+          --+@*
+          +++@*
+    K@*
+  -----+  --++@*
+M --A--+  -C++@*
+  -----+  --++@*
+  ++++++  ++++
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨14❩, , @t{blas.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {ipiv} (object)
+@anchor{❨63❩}@c
+@functionsubindex{ipiv}@c
+Pivot indices@comma{} counting from 0@comma{} in a format understood by SELECT.
+Example:@*
+
+   (let+ (((@ampchar{}accessors-r/o lu-l lu-u ipiv) (lu a)))@*
+     (num= (select a ipiv) (mm lu-l lu-u) ipiv-inverse t))    ; => T
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {ipiv-inverse} (object)
+@anchor{❨147❩}@c
+@functionsubindex{ipiv-inverse}@c
+Inverted permutation for pivot indices@comma{} in a format understood by SELECT.
+
+Example:@*
+
+   (let+ (((@ampchar{}accessors-r/o lu-l lu-u ipiv-inverse) (lu a)))@*
+     (num= a (select (mm lu-l lu-u) ipiv-inverse t)))        ; => T
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {least-squares} (y x &rest rest &key method &allow-other-keys)
+@anchor{❨135❩}@c
+@functionsubindex{least-squares}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {lu-l} (lu)
+@anchor{❨93❩}@c
+@functionsubindex{lu-l}@c
+Return the L part of an LU factorization.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {lu-u} (lu)
+@anchor{❨71❩}@c
+@functionsubindex{lu-u}@c
+Return the U part of an LU factorization.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {mmm} (&rest matrices)
+@anchor{❨16❩}@c
+@functionsubindex{mmm}@c
+Multiply arguments from left to right using MM.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {nrm2} (x &key n incx)
+@anchor{❨152❩}@c
+@functionsubindex{nrm2}@c
+Return the L2 norm of X.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨14❩, , @t{blas.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {qr-r} (qr)
+@anchor{❨97❩}@c
+@functionsubindex{qr-r}@c
+Return the R part of a QR factorization.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {scal!} (alpha x &key n incx)
+@anchor{❨66❩}@c
+@functionsubindex{scal!}@c
+X = alpha * X.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨14❩, , @t{blas.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {spectral-factorization} (a &key abstol)
+@anchor{❨148❩}@c
+@functionsubindex{spectral-factorization}@c
+Return a spectral factorization of A.@*
+
+The LAPACK manual says the following about ABSTOL:@*
+
+The absolute error tolerance for the eigenvalues.  An approximate eigenvalue is accepted as converged when it is determined to lie in an interval [a@comma{}b] of width less than or equal to@*
+
+                  ABSTOL + EPS *   max( |a|@comma{}|b| ) @comma{}@*
+
+where EPS is the machine precision.  If ABSTOL is less than or equal to zero@comma{} then EPS*|T| will be used in its place@comma{} where |T| is the 1-norm of the tridiagonal matrix obtained by reducing A to tridiagonal form.@*
+
+See "Computing Small Singular Values of Bidiagonal Matrices with Guaranteed High Relative Accuracy@comma{}" by Demmel and Kahan@comma{} LAPACK Working Note @hashchar{}3.@*
+
+If high relative accuracy is important@comma{} set ABSTOL to DLAMCH( 'Safe minimum').  Doing so will guarantee that eigenvalues are computed to high relative accuracy when possible in future releases.  The current code does not make any guarantees about high relative accuracy@comma{} but furutre releases will. See J. Barlow and J. Demmel@comma{} "Computing Accurate Eigensystems of Scaled Diagonally Dominant Matrices"@comma{} LAPACK Working Note @hashchar{}7@comma{} for a discussion of which matrices define their eigenvalues to high relative accuracy.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@end table
+@end deffn
+@deffn {Reader} {spectral-factorization-w} (instance)
+@anchor{❨129❩}@c
+@functionsubindex{spectral-factorization-w}@c
+@deffnx {Writer} {(setf spectral-factorization-w)} (instance)
+@anchor{❨130❩}@c
+@functionsubindex{(setf spectral-factorization-w)}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@item Target Slot
+@ref{❨151❩, , @t{w}}.
+@end table
+@end deffn
+@deffn {Reader} {spectral-factorization-z} (instance)
+@anchor{❨24❩}@c
+@functionsubindex{spectral-factorization-z}@c
+@deffnx {Writer} {(setf spectral-factorization-z)} (instance)
+@anchor{❨25❩}@c
+@functionsubindex{(setf spectral-factorization-z)}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@item Target Slot
+@ref{❨150❩, , @t{z}}.
+@end table
+@end deffn
+@deffn {Reader} {svd-d} (instance)
+@anchor{❨64❩}@c
+@functionsubindex{svd-d}@c
+@deffnx {Writer} {(setf svd-d)} (instance)
+@anchor{❨65❩}@c
+@functionsubindex{(setf svd-d)}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@item Target Slot
+@ref{❨85❩, , @t{d}}.
+@end table
+@end deffn
+@deffn {Reader} {svd-u} (instance)
+@anchor{❨34❩}@c
+@functionsubindex{svd-u}@c
+@deffnx {Writer} {(setf svd-u)} (instance)
+@anchor{❨35❩}@c
+@functionsubindex{(setf svd-u)}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@item Target Slot
+@ref{❨84❩, , @t{u}}.
+@end table
+@end deffn
+@deffn {Reader} {svd-vt} (instance)
+@anchor{❨88❩}@c
+@functionsubindex{svd-vt}@c
+@deffnx {Writer} {(setf svd-vt)} (instance)
+@anchor{❨89❩}@c
+@functionsubindex{(setf svd-vt)}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@item Target Slot
+@ref{❨86❩, , @t{vt}}.
+@end table
+@end deffn
+@deffn {Function} {xx} (left-square-root)
+@anchor{❨74❩}@c
+@functionsubindex{xx}@c
+Convenience function to create a matrix from a left square root.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+
+@node Public generic functions, Public standalone methods, Public ordinary functions, Public Interface
+@subsection Generic functions
+@deffn {Generic Function} {cholesky} (a)
+@anchor{❨153❩}@c
+@genericsubindex{cholesky}@c
+Cholesky factorization.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@item Methods
+@deffn {Method} {cholesky} ((a @t{hermitian-matrix}))
+@anchor{❨154❩}@c
+@methodsubindex{cholesky}@c
+@table @strong
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {hermitian-factorization} (a)
+@anchor{❨20❩}@c
+@genericsubindex{hermitian-factorization}@c
+Compute the hermitian factorization.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@item Methods
+@deffn {Method} {hermitian-factorization} ((a @t{hermitian-matrix}))
+@anchor{❨21❩}@c
+@methodsubindex{hermitian-factorization}@c
+@table @strong
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {invert} (a &key tolerance &allow-other-keys)
+@anchor{❨137❩}@c
+@genericsubindex{invert}@c
+Invert A.  The inverse of matrix factorizations are other factorizations when appropriate@comma{} otherwise the result is a matrix.  Usage note: inverting dense matrices is unnecessary and unwise in most cases@comma{} because it is numerically unstable.  If you are solving many Ax=b equations with the same A@comma{} use a matrix factorization like LU.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@item Methods
+@deffn {Method} {invert} ((diagonal @t{diagonal-matrix}) &key tolerance)
+@anchor{❨138❩}@c
+@methodsubindex{invert}@c
+For pseudoinverse@comma{} suppressing diagonal elements below TOLERANCE (if given@comma{} otherwise / is just used without any checking.
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {invert} ((a @ref{❨155❩, , @t{cholesky}}) &key)
+@anchor{❨139❩}@c
+@methodsubindex{invert}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {invert} ((a @t{lower-triangular-matrix}) &key)
+@anchor{❨140❩}@c
+@methodsubindex{invert}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {invert} ((a @t{upper-triangular-matrix}) &key)
+@anchor{❨141❩}@c
+@methodsubindex{invert}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {invert} ((a @t{hermitian-matrix}) &key)
+@anchor{❨142❩}@c
+@methodsubindex{invert}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {invert} ((a @ref{❨22❩, , @t{hermitian-factorization}}) &key)
+@anchor{❨143❩}@c
+@methodsubindex{invert}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {invert} ((lu @ref{❨69❩, , @t{lu}}) &key)
+@anchor{❨144❩}@c
+@methodsubindex{invert}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {invert} ((a @t{array}) &key)
+@anchor{❨145❩}@c
+@methodsubindex{invert}@c
+@table @strong
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {invert-xx} (xx)
+@anchor{❨72❩}@c
+@genericsubindex{invert-xx}@c
+Calculate (X^T X)-1 (which is used for calculating the variance of estimates) and return as a decomposition.  Usually XX is a decomposition itself@comma{} eg QR returned by least squares.  Note: this can be used to generate random draws@comma{} etc.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@item Methods
+@deffn {Method} {invert-xx} ((qr @ref{❨29❩, , @t{qr}}))
+@anchor{❨73❩}@c
+@methodsubindex{invert-xx}@c
+@table @strong
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {left-square-root} (a)
+@anchor{❨36❩}@c
+@genericsubindex{left-square-root}@c
+Return X such that XX^T=A.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@item Methods
+@deffn {Method} {left-square-root} ((a @t{diagonal-matrix}))
+@anchor{❨37❩}@c
+@methodsubindex{left-square-root}@c
+@table @strong
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {left-square-root} ((hermitian-matrix @t{hermitian-matrix}))
+@anchor{❨38❩}@c
+@methodsubindex{left-square-root}@c
+@table @strong
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {left-square-root} ((a @ref{❨32❩, , @t{matrix-square-root}}))
+@anchor{❨39❩}@c
+@methodsubindex{left-square-root}@c
+@table @strong
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {logdet} (matrix)
+@anchor{❨100❩}@c
+@genericsubindex{logdet}@c
+Logarithm of the determinant of a matrix.  Return -1@comma{} 1 or 0 (or equivalent) to correct for the sign@comma{} as a second value.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@item Methods
+@deffn {Method} {logdet} ((matrix @t{upper-triangular-matrix}))
+@anchor{❨101❩}@c
+@methodsubindex{logdet}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {logdet} ((matrix @t{lower-triangular-matrix}))
+@anchor{❨102❩}@c
+@methodsubindex{logdet}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {logdet} ((matrix @t{array}))
+@anchor{❨103❩}@c
+@methodsubindex{logdet}@c
+@table @strong
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {lu} (a)
+@anchor{❨67❩}@c
+@genericsubindex{lu}@c
+LU decomposition of A
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@item Methods
+@deffn {Method} {lu} ((a @t{array}))
+@anchor{❨68❩}@c
+@methodsubindex{lu}@c
+@table @strong
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {mm} (a b)
+@anchor{❨44❩}@c
+@genericsubindex{mm}@c
+Matrix multiplication of A and B.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@item Methods
+@deffn {Method} {mm} ((a @t{(eql t)}) (b @t{diagonal-matrix}))
+@anchor{❨45❩}@c
+@methodsubindex{mm}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {mm} ((a @t{diagonal-matrix}) (b @t{(eql t)}))
+@anchor{❨46❩}@c
+@methodsubindex{mm}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {mm} ((a @t{diagonal-matrix}) (b @t{diagonal-matrix}))
+@anchor{❨47❩}@c
+@methodsubindex{mm}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {mm} ((a @t{diagonal-matrix}) (b @t{vector}))
+@anchor{❨48❩}@c
+@methodsubindex{mm}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {mm} ((a @t{vector}) (b @t{diagonal-matrix}))
+@anchor{❨49❩}@c
+@methodsubindex{mm}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {mm} ((a @t{array}) (b @t{diagonal-matrix}))
+@anchor{❨50❩}@c
+@methodsubindex{mm}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {mm} ((a @t{diagonal-matrix}) (b @t{array}))
+@anchor{❨51❩}@c
+@methodsubindex{mm}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {mm} ((a @t{(eql t)}) (b @t{vector}))
+@anchor{❨52❩}@c
+@methodsubindex{mm}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {mm} ((a @t{vector}) (b @t{(eql t)}))
+@anchor{❨53❩}@c
+@methodsubindex{mm}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {mm} ((a @t{vector}) (b @t{vector}))
+@anchor{❨54❩}@c
+@methodsubindex{mm}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {mm} (a (b @t{wrapped-matrix}))
+@anchor{❨55❩}@c
+@methodsubindex{mm}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {mm} ((a @t{wrapped-matrix}) b)
+@anchor{❨56❩}@c
+@methodsubindex{mm}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {mm} ((a @t{wrapped-matrix}) (b @t{wrapped-matrix}))
+@anchor{❨57❩}@c
+@methodsubindex{mm}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {mm} ((a @t{(eql t)}) (b @t{array}))
+@anchor{❨58❩}@c
+@methodsubindex{mm}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {mm} ((a @t{array}) (b @t{(eql t)}))
+@anchor{❨59❩}@c
+@methodsubindex{mm}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {mm} ((a @t{array}) (b @t{array}))
+@anchor{❨60❩}@c
+@methodsubindex{mm}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {mm} (a b)
+@anchor{❨61❩}@c
+@methodsubindex{mm}@c
+@table @strong
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {outer} (a b)
+@anchor{❨124❩}@c
+@genericsubindex{outer}@c
+Return the outer product column(a) row(b)^H.  If either A or B is T@comma{} they are taken to be conjugate transposes of the other argument.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@item Methods
+@deffn {Method} {outer} ((a @t{vector}) (b @t{(eql t)}))
+@anchor{❨125❩}@c
+@methodsubindex{outer}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {outer} ((a @t{(eql t)}) (b @t{vector}))
+@anchor{❨126❩}@c
+@methodsubindex{outer}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {outer} ((a @t{vector}) (b @t{vector}))
+@anchor{❨127❩}@c
+@methodsubindex{outer}@c
+@table @strong
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {qr} (object)
+@anchor{❨26❩}@c
+@genericsubindex{qr}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Methods
+@deffn {Method} {qr} ((a @t{array}))
+@anchor{❨27❩}@c
+@methodsubindex{qr}@c
+@table @strong
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@end table
+@end deffn
+@deffn {Reader Method} {qr} ((qr @ref{❨29❩, , @t{qr}}))
+@anchor{❨28❩}@c
+@methodsubindex{qr}@c
+matrix storing the QR factorization.
+@table @strong
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@item Target Slot
+@ref{❨30❩, , @t{qr}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {right-square-root} (a)
+@anchor{❨94❩}@c
+@genericsubindex{right-square-root}@c
+Return Y such that Y^T Y=A.@*
+
+Efficiency note: decompositions should store the left square root X@comma{} and compute Y=X^T on demand@comma{} so getting X directly might be more efficient if you don't need X^T.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@item Methods
+@deffn {Method} {right-square-root} ((a @ref{❨32❩, , @t{matrix-square-root}}))
+@anchor{❨95❩}@c
+@methodsubindex{right-square-root}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {right-square-root} (a)
+@anchor{❨96❩}@c
+@methodsubindex{right-square-root}@c
+@table @strong
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {solve} (a b)
+@anchor{❨112❩}@c
+@genericsubindex{solve}@c
+Return X that solves AX=B.  When B is a vector@comma{} so is X.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@item Methods
+@deffn {Method} {solve} ((a @t{diagonal-matrix}) b)
+@anchor{❨113❩}@c
+@methodsubindex{solve}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {solve} ((a @t{upper-triangular-matrix}) b)
+@anchor{❨114❩}@c
+@methodsubindex{solve}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {solve} ((a @t{lower-triangular-matrix}) b)
+@anchor{❨115❩}@c
+@methodsubindex{solve}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {solve} ((a @t{hermitian-matrix}) (b @t{array}))
+@anchor{❨116❩}@c
+@methodsubindex{solve}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {solve} ((a @ref{❨22❩, , @t{hermitian-factorization}}) (b @t{array}))
+@anchor{❨117❩}@c
+@methodsubindex{solve}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {solve} ((hermitian-matrix @t{hermitian-matrix}) b)
+@anchor{❨118❩}@c
+@methodsubindex{solve}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {solve} ((cholesky @ref{❨155❩, , @t{cholesky}}) b)
+@anchor{❨119❩}@c
+@methodsubindex{solve}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {solve} ((a @t{array}) (b @t{array}))
+@anchor{❨120❩}@c
+@methodsubindex{solve}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {solve} ((lu @ref{❨69❩, , @t{lu}}) (b @t{array}))
+@anchor{❨121❩}@c
+@methodsubindex{solve}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {solve} (a (b @t{wrapped-matrix}))
+@anchor{❨122❩}@c
+@methodsubindex{solve}@c
+@table @strong
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {svd} (a &optional vectors)
+@anchor{❨81❩}@c
+@genericsubindex{svd}@c
+Return singular value decomposition A.@*
+
+  VECTORS determines how singular vectors are calculated:@*
+
+  - NIL sets U and VT to NIL@*
+  - :ALL makes U and VT square@comma{} with dimensions conforming to A@*
+  - :THIN makes the larger of U and VT rectangular.  This means that not all
+    of the singular vectors are calculates@comma{} and saves computational time when
+    A is far from square.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@item Methods
+@deffn {Method} {svd} ((a @t{array}) &optional vectors)
+@anchor{❨82❩}@c
+@methodsubindex{svd}@c
+@table @strong
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {tr} (a)
+@anchor{❨40❩}@c
+@genericsubindex{tr}@c
+Trace of a square matrix.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@item Methods
+@deffn {Method} {tr} ((a @t{array}))
+@anchor{❨41❩}@c
+@methodsubindex{tr}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {tr} ((a @t{wrapped-matrix}))
+@anchor{❨42❩}@c
+@methodsubindex{tr}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {tr} ((a @t{diagonal-matrix}))
+@anchor{❨43❩}@c
+@methodsubindex{tr}@c
+@table @strong
+@end table
+@end deffn
+@end table
+@end deffn
+
+@node Public standalone methods, Public conditions, Public generic functions, Public Interface
+@subsection Standalone methods
+@deffn {Method} {as-array} ((matrix-square-root @ref{❨32❩, , @t{matrix-square-root}}))
+@anchor{❨346❩}@c
+@methodsubindex{as-array}@c
+@table @strong
+@item Package
+@t{array-operations/generic}.
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {as-array} ((svd @ref{❨83❩, , @t{svd}}))
+@anchor{❨360❩}@c
+@methodsubindex{as-array}@c
+@table @strong
+@item Package
+@t{array-operations/generic}.
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {as-array} ((sf @ref{❨149❩, , @t{spectral-factorization}}))
+@anchor{❨365❩}@c
+@methodsubindex{as-array}@c
+@table @strong
+@item Package
+@t{array-operations/generic}.
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {e2*} ((a @t{number}) (b @ref{❨32❩, , @t{matrix-square-root}}))
+@anchor{❨350❩}@c
+@methodsubindex{e2*}@c
+@table @strong
+@item Package
+@t{num-utils.elementwise}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {e2*} ((a @ref{❨32❩, , @t{matrix-square-root}}) (b @t{number}))
+@anchor{❨351❩}@c
+@methodsubindex{e2*}@c
+@table @strong
+@item Package
+@t{num-utils.elementwise}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {e2+} (a (b @ref{❨32❩, , @t{matrix-square-root}}))
+@anchor{❨347❩}@c
+@methodsubindex{e2+}@c
+@table @strong
+@item Package
+@t{num-utils.elementwise}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {e2+} ((a @ref{❨32❩, , @t{matrix-square-root}}) b)
+@anchor{❨348❩}@c
+@methodsubindex{e2+}@c
+@table @strong
+@item Package
+@t{num-utils.elementwise}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {e2/} ((a @ref{❨32❩, , @t{matrix-square-root}}) (b @t{number}))
+@anchor{❨349❩}@c
+@methodsubindex{e2/}@c
+@table @strong
+@item Package
+@t{num-utils.elementwise}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {print-object} ((lu @ref{❨69❩, , @t{lu}}) stream)
+@anchor{❨359❩}@c
+@methodsubindex{print-object}@c
+@table @strong
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Method} {print-object} ((object @ref{❨91❩, , @t{lla-efficiency-warning-array-type}}) stream)
+@anchor{❨362❩}@c
+@methodsubindex{print-object}@c
+@table @strong
+@item Source
+@ref{❨7❩, , @t{conditions.lisp}}.
+@end table
+@end deffn
+
+@node Public conditions, Public structures, Public standalone methods, Public Interface
+@subsection Conditions
+@deftp {Condition} {lapack-error}
+@anchor{❨105❩}@c
+@conditionsubindex{lapack-error}@c
+The LAPACK procedure returned a nonzero info code.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨7❩, , @t{conditions.lisp}}.
+@item Direct superclasses
+@t{error}.
+@item Direct subclasses
+@itemize @bullet
+@item
+@ref{❨133❩, , @t{lapack-failure}}.
+@item
+@ref{❨78❩, , @t{lapack-invalid-argument}}.
+@item
+@ref{❨98❩, , @t{lla-incompatible-dimensions}}.
+@end itemize
+@end table
+@end deftp
+@deftp {Condition} {lapack-failure}
+@anchor{❨133❩}@c
+@conditionsubindex{lapack-failure}@c
+Superclass of all LAPACK errors with a positive INFO
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨7❩, , @t{conditions.lisp}}.
+@item Direct superclasses
+@ref{❨105❩, , @t{lapack-error}}.
+@item Direct subclasses
+@ref{❨128❩, , @t{lapack-singular-matrix}}.
+@item Direct slots
+@defvr {Slot} {info}
+@anchor{❨134❩}@c
+@slotsubindex{info}@c
+INFO corresponding to error message.
+@table @strong
+@item Initargs
+@t{:info}
+@end table
+@end defvr
+@end table
+@end deftp
+@deftp {Condition} {lapack-invalid-argument}
+@anchor{❨78❩}@c
+@conditionsubindex{lapack-invalid-argument}@c
+An argument to a LAPACK procedure had an illegal value.  It is very likely that this indicates a bug in LLA and should not happen.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨7❩, , @t{conditions.lisp}}.
+@item Direct superclasses
+@itemize @bullet
+@item
+@ref{❨105❩, , @t{lapack-error}}.
+@item
+@ref{❨17❩, , @t{lla-internal-error}}.
+@end itemize
+@item Direct slots
+@defvr {Slot} {position}
+@anchor{❨79❩}@c
+@slotsubindex{position}@c
+Position of the illegal argument
+@table @strong
+@item Package
+@t{common-lisp}.
+@item Initargs
+@t{:position}
+@end table
+@end defvr
+@end table
+@end deftp
+@deftp {Condition} {lapack-singular-matrix}
+@anchor{❨128❩}@c
+@conditionsubindex{lapack-singular-matrix}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨7❩, , @t{conditions.lisp}}.
+@item Direct superclasses
+@ref{❨133❩, , @t{lapack-failure}}.
+@end table
+@end deftp
+@deftp {Condition} {lla-efficiency-warning}
+@anchor{❨87❩}@c
+@conditionsubindex{lla-efficiency-warning}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨7❩, , @t{conditions.lisp}}.
+@item Direct superclasses
+@t{warning}.
+@item Direct subclasses
+@itemize @bullet
+@item
+@ref{❨109❩, , @t{lla-efficiency-warning-array-conversion}}.
+@item
+@ref{❨91❩, , @t{lla-efficiency-warning-array-type}}.
+@end itemize
+@end table
+@end deftp
+@deftp {Condition} {lla-efficiency-warning-array-conversion}
+@anchor{❨109❩}@c
+@conditionsubindex{lla-efficiency-warning-array-conversion}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨7❩, , @t{conditions.lisp}}.
+@item Direct superclasses
+@ref{❨87❩, , @t{lla-efficiency-warning}}.
+@item Direct slots
+@defvr {Slot} {array}
+@anchor{❨110❩}@c
+@slotsubindex{array}@c
+The array that had to be copied.
+@table @strong
+@item Package
+@t{common-lisp}.
+@item Initargs
+@t{:array}
+@end table
+@end defvr
+@defvr {Slot} {type}
+@anchor{❨111❩}@c
+@slotsubindex{type}@c
+Required element type.
+@table @strong
+@item Package
+@t{common-lisp}.
+@item Initargs
+@t{:type}
+@end table
+@end defvr
+@end table
+@end deftp
+@deftp {Condition} {lla-efficiency-warning-array-type}
+@anchor{❨91❩}@c
+@conditionsubindex{lla-efficiency-warning-array-type}@c
+See *LLA-EFFICIENCY-WARNING-ARRAY-TYPE*.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨7❩, , @t{conditions.lisp}}.
+@item Direct superclasses
+@ref{❨87❩, , @t{lla-efficiency-warning}}.
+@item Direct methods
+@ref{❨362❩, , @t{print-object}}.
+@item Direct slots
+@defvr {Slot} {array}
+@anchor{❨92❩}@c
+@slotsubindex{array}@c
+@table @strong
+@item Package
+@t{common-lisp}.
+@item Initargs
+@t{:array}
+@end table
+@end defvr
+@end table
+@end deftp
+@deftp {Condition} {lla-incompatible-dimensions}
+@anchor{❨98❩}@c
+@conditionsubindex{lla-incompatible-dimensions}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨7❩, , @t{conditions.lisp}}.
+@item Direct superclasses
+@ref{❨105❩, , @t{lapack-error}}.
+@end table
+@end deftp
+@deftp {Condition} {lla-internal-error}
+@anchor{❨17❩}@c
+@conditionsubindex{lla-internal-error}@c
+Internal error in LLA.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨7❩, , @t{conditions.lisp}}.
+@item Direct superclasses
+@t{error}.
+@item Direct subclasses
+@ref{❨78❩, , @t{lapack-invalid-argument}}.
+@item Direct slots
+@defvr {Slot} {message}
+@anchor{❨18❩}@c
+@slotsubindex{message}@c
+@table @strong
+@item Initform
+@t{(quote "")}
+@item Initargs
+@t{:message}
+@end table
+@end defvr
+@end table
+@end deftp
+@deftp {Condition} {lla-unhandled-type}
+@anchor{❨106❩}@c
+@conditionsubindex{lla-unhandled-type}@c
+Could not classify object as a numeric type handled by LLA.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨7❩, , @t{conditions.lisp}}.
+@item Direct superclasses
+@t{error}.
+@item Direct slots
+@defvr {Slot} {object}
+@anchor{❨107❩}@c
+@slotsubindex{object}@c
+@table @strong
+@item Initform
+@t{(quote :object)}
+@end table
+@end defvr
+@end table
+@end deftp
+
+@node Public structures, Public classes, Public conditions, Public Interface
+@subsection Structures
+@deftp {Structure} {cholesky}
+@anchor{❨155❩}@c
+@structuresubindex{cholesky}@c
+Cholesky factorization a matrix.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@item Direct superclasses
+@ref{❨32❩, , @t{matrix-square-root}}.
+@item Direct methods
+@itemize @bullet
+@item
+@ref{❨139❩, , @t{invert}}.
+@item
+@ref{❨119❩, , @t{solve}}.
+@end itemize
+@end table
+@end deftp
+@deftp {Structure} {matrix-square-root}
+@anchor{❨32❩}@c
+@structuresubindex{matrix-square-root}@c
+General class for representing XX^T decompositions of matrices@comma{} regardless of how they were computed.  The convention is to store X@comma{} the left square root.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@item Direct superclasses
+@t{structure-object}.
+@item Direct subclasses
+@ref{❨155❩, , @t{cholesky}}.
+@item Direct methods
+@itemize @bullet
+@item
+@ref{❨346❩, , @t{as-array}}.
+@item
+@ref{❨350❩, , @t{e2*}}.
+@item
+@ref{❨351❩, , @t{e2*}}.
+@item
+@ref{❨347❩, , @t{e2+}}.
+@item
+@ref{❨348❩, , @t{e2+}}.
+@item
+@ref{❨349❩, , @t{e2/}}.
+@item
+@ref{❨39❩, , @t{left-square-root}}.
+@item
+@ref{❨95❩, , @t{right-square-root}}.
+@end itemize
+@item Direct slots
+@defvr {Slot} {left}
+@anchor{❨33❩}@c
+@slotsubindex{left}@c
+@table @strong
+@item Package
+@t{num-utils.interval}.
+@item Readers
+@ref{❨321❩, , @t{matrix-square-root-left}}.
+@item Writers
+@ref{❨322❩, , @t{(setf matrix-square-root-left)}}.
+@end table
+@end defvr
+@end table
+@end deftp
+@deftp {Structure} {spectral-factorization}
+@anchor{❨149❩}@c
+@structuresubindex{spectral-factorization}@c
+Z W Z^T factorization of a Hermitian matrix@comma{} where the columns of Z contain the eigenvectors and W is a diagonal matrix of the eigenvalues.  Z is a unitary matrix.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@item Direct superclasses
+@t{structure-object}.
+@item Direct methods
+@ref{❨365❩, , @t{as-array}}.
+@item Direct slots
+@defvr {Slot} {z}
+@anchor{❨150❩}@c
+@slotsubindex{z}@c
+@table @strong
+@item Readers
+@ref{❨24❩, , @t{spectral-factorization-z}}.
+@item Writers
+@ref{❨25❩, , @t{(setf spectral-factorization-z)}}.
+@end table
+@end defvr
+@defvr {Slot} {w}
+@anchor{❨151❩}@c
+@slotsubindex{w}@c
+@table @strong
+@item Readers
+@ref{❨129❩, , @t{spectral-factorization-w}}.
+@item Writers
+@ref{❨130❩, , @t{(setf spectral-factorization-w)}}.
+@end table
+@end defvr
+@end table
+@end deftp
+@deftp {Structure} {svd}
+@anchor{❨83❩}@c
+@structuresubindex{svd}@c
+Singular value decomposition.  Singular values are in S@comma{} in descending order.  U and VT may be NIL in case they are not computed.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@item Direct superclasses
+@t{structure-object}.
+@item Direct methods
+@ref{❨360❩, , @t{as-array}}.
+@item Direct slots
+@defvr {Slot} {u}
+@anchor{❨84❩}@c
+@slotsubindex{u}@c
+@table @strong
+@item Readers
+@ref{❨34❩, , @t{svd-u}}.
+@item Writers
+@ref{❨35❩, , @t{(setf svd-u)}}.
+@end table
+@end defvr
+@defvr {Slot} {d}
+@anchor{❨85❩}@c
+@slotsubindex{d}@c
+@table @strong
+@item Readers
+@ref{❨64❩, , @t{svd-d}}.
+@item Writers
+@ref{❨65❩, , @t{(setf svd-d)}}.
+@end table
+@end defvr
+@defvr {Slot} {vt}
+@anchor{❨86❩}@c
+@slotsubindex{vt}@c
+@table @strong
+@item Readers
+@ref{❨88❩, , @t{svd-vt}}.
+@item Writers
+@ref{❨89❩, , @t{(setf svd-vt)}}.
+@end table
+@end defvr
+@end table
+@end deftp
+
+@node Public classes, Public types, Public structures, Public Interface
+@subsection Classes
+@deftp {Class} {hermitian-factorization}
+@anchor{❨22❩}@c
+@classsubindex{hermitian-factorization}@c
+Factorization for an indefinite hermitian matrix with
+  pivoting.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@item Direct superclasses
+@ref{❨189❩, , @t{ipiv-mixin}}.
+@item Direct methods
+@itemize @bullet
+@item
+@ref{❨251❩, , @t{factor}}.
+@item
+@ref{❨143❩, , @t{invert}}.
+@item
+@ref{❨117❩, , @t{solve}}.
+@end itemize
+@item Direct slots
+@defvr {Slot} {factor}
+@anchor{❨23❩}@c
+@slotsubindex{factor}@c
+see documentation of *SYTRF and *HETRF@comma{} storage is@*
+           in the half specified by HERMITIAN-ORIENTATION and otherwise
+           treated as opaque.
+@table @strong
+@item Initargs
+@t{:factor}
+@item Readers
+@ref{❨251❩, , @t{factor}}.
+@item Writers
+@i{This slot is read-only.}
+@end table
+@end defvr
+@end table
+@end deftp
+@deftp {Class} {lu}
+@anchor{❨69❩}@c
+@classsubindex{lu}@c
+LU factorization of a matrix with pivoting.  (SELECT A IPIV) is (MM L U)@comma{} when IPIV is used to obtain the permutation.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@item Direct superclasses
+@ref{❨189❩, , @t{ipiv-mixin}}.
+@item Direct methods
+@itemize @bullet
+@item
+@ref{❨144❩, , @t{invert}}.
+@item
+@ref{❨178❩, , @t{lu-matrix}}.
+@item
+@ref{❨286❩, , @t{permutations}}.
+@item
+@ref{❨359❩, , @t{print-object}}.
+@item
+@ref{❨121❩, , @t{solve}}.
+@end itemize
+@item Direct slots
+@defvr {Slot} {lu}
+@anchor{❨70❩}@c
+@slotsubindex{lu}@c
+matrix storing the transpose of the LU factorization.
+@table @strong
+@item Initargs
+@t{:lu}
+@item Readers
+@ref{❨178❩, , @t{lu-matrix}}.
+@item Writers
+@i{This slot is read-only.}
+@end table
+@end defvr
+@end table
+@end deftp
+@deftp {Class} {qr}
+@anchor{❨29❩}@c
+@classsubindex{qr}@c
+QR factorization of a matrix.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@item Direct methods
+@itemize @bullet
+@item
+@ref{❨73❩, , @t{invert-xx}}.
+@item
+@ref{❨28❩, , @t{qr}}.
+@item
+@ref{❨222❩, , @t{(setf tau)}}.
+@item
+@ref{❨220❩, , @t{tau}}.
+@end itemize
+@item Direct slots
+@defvr {Slot} {qr}
+@anchor{❨30❩}@c
+@slotsubindex{qr}@c
+matrix storing the QR factorization.
+@table @strong
+@item Initargs
+@t{:qr}
+@item Readers
+@ref{❨28❩, , @t{qr}}.
+@item Writers
+@i{This slot is read-only.}
+@end table
+@end defvr
+@defvr {Slot} {tau}
+@anchor{❨31❩}@c
+@slotsubindex{tau}@c
+complex scalar for elementary reflectors (see documentation of xGEQRF).
+@table @strong
+@item Initargs
+@t{:tau}
+@item Readers
+@ref{❨220❩, , @t{tau}}.
+@item Writers
+@ref{❨222❩, , @t{(setf tau)}}.
+@end table
+@end defvr
+@end table
+@end deftp
+
+@node Public types, , Public classes, Public Interface
+@subsection Types
+@deftp {Type} {lla-complex-double} ()
+@anchor{❨77❩}@c
+@typesubindex{lla-complex-double}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨8❩, , @t{types.lisp}}.
+@end table
+@end deftp
+@deftp {Type} {lla-complex-single} ()
+@anchor{❨76❩}@c
+@typesubindex{lla-complex-single}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨8❩, , @t{types.lisp}}.
+@end table
+@end deftp
+@deftp {Type} {lla-double} ()
+@anchor{❨99❩}@c
+@typesubindex{lla-double}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨8❩, , @t{types.lisp}}.
+@end table
+@end deftp
+@deftp {Type} {lla-integer} ()
+@anchor{❨62❩}@c
+@typesubindex{lla-integer}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨8❩, , @t{types.lisp}}.
+@end table
+@end deftp
+@deftp {Type} {lla-single} ()
+@anchor{❨108❩}@c
+@typesubindex{lla-single}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨8❩, , @t{types.lisp}}.
+@end table
+@end deftp
+
+
+@c ---------
+@c Internals
+@c ---------
+@node Internals, , Public Interface, Definitions
+@section Internals
+@menu
+* Private constants::
+* Private symbol macros::
+* Private macros::
+* Private ordinary functions::
+* Private generic functions::
+* Private classes::
+* Private types::
+@end menu
+
+@node Private constants, Private symbol macros, Internals, Internals
+@subsection Constants
+@defvr {Constant} {+complex-double+}
+@anchor{❨275❩}@c
+@constantsubindex{+complex-double+}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨8❩, , @t{types.lisp}}.
+@end table
+@end defvr
+@defvr {Constant} {+complex-single+}
+@anchor{❨158❩}@c
+@constantsubindex{+complex-single+}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨8❩, , @t{types.lisp}}.
+@end table
+@end defvr
+@defvr {Constant} {+double+}
+@anchor{❨179❩}@c
+@constantsubindex{+double+}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨8❩, , @t{types.lisp}}.
+@end table
+@end defvr
+@defvr {Constant} {+float-types+}
+@anchor{❨288❩}@c
+@constantsubindex{+float-types+}@c
+List of all internal float types.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨8❩, , @t{types.lisp}}.
+@end table
+@end defvr
+@defvr {Constant} {+integer+}
+@anchor{❨235❩}@c
+@constantsubindex{+integer+}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨8❩, , @t{types.lisp}}.
+@end table
+@end defvr
+@defvr {Constant} {+internal-types+}
+@anchor{❨224❩}@c
+@constantsubindex{+internal-types+}@c
+List of all internal types.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨8❩, , @t{types.lisp}}.
+@end table
+@end defvr
+@defvr {Constant} {+single+}
+@anchor{❨320❩}@c
+@constantsubindex{+single+}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨8❩, , @t{types.lisp}}.
+@end table
+@end defvr
+
+@node Private symbol macros, Private macros, Private constants, Internals
+@subsection Symbol macros
+@defvr {Symbol Macro} {@ampchar{}info}
+@anchor{❨169❩}@c
+@symbolmacrosubindex{@ampchar{}info}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@end table
+@end defvr
+
+@node Private macros, Private ordinary functions, Private symbol macros, Internals
+@subsection Macros
+@deffn {Macro} {@ampchar{}array-in} (input &key type transpose? force-copy?)
+@anchor{❨301❩}@c
+@macrosubindex{@ampchar{}array-in}@c
+Array which serves as an input.  See FORTRAN-INPUT-ARRAY.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@end table
+@end deffn
+@deffn {Macro} {@ampchar{}array-in/out} ((&key input type transpose? force-copy?) (&key output dimensions type transpose?))
+@anchor{❨243❩}@c
+@macrosubindex{@ampchar{}array-in/out}@c
+Input/output array.  See FORTRAN-INPUT-OUTPUT-ARRAY.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@end table
+@end deffn
+@deffn {Macro} {@ampchar{}array-out} (output &key dimensions type transpose?)
+@anchor{❨303❩}@c
+@macrosubindex{@ampchar{}array-out}@c
+Output array.  See FORTRAN-OUTPUT-ARRAY.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@end table
+@end deffn
+@deffn {Macro} {@ampchar{}atom} (value &key type output)
+@anchor{❨246❩}@c
+@macrosubindex{@ampchar{}atom}@c
+Atoms passed to FORTRAN.  When not given@comma{} TYPE is inferred from the call's default.  VALUE is coerced to the desired type.  When OUTPUT is given@comma{} value is read after the call and placed there.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@end table
+@end deffn
+@deffn {Macro} {@ampchar{}char} (character)
+@anchor{❨298❩}@c
+@macrosubindex{@ampchar{}char}@c
+Shorthand for character.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@end table
+@end deffn
+@deffn {Macro} {@ampchar{}info} (&key condition variable)
+@anchor{❨170❩}@c
+@macrosubindex{@ampchar{}info}@c
+Argument for checking whether the call was executed without an error.  Automatically takes care of raising the appropriate condition if it wasn't.  CONDITION specifies the condition to raise in case of positive error codes@comma{} use NIL to ignore these.  VARIABLE can be used to specify 
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@end table
+@end deffn
+@deffn {Macro} {@ampchar{}integer} (value &key output)
+@anchor{❨160❩}@c
+@macrosubindex{@ampchar{}integer}@c
+Shorthand for integer atom.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@end table
+@end deffn
+@deffn {Macro} {@ampchar{}integers} (&rest values)
+@anchor{❨289❩}@c
+@macrosubindex{@ampchar{}integers}@c
+Shorthand for integer atoms (which are not modified).  Useful for combining arguments.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@end table
+@end deffn
+@deffn {Macro} {@ampchar{}new} (variable)
+@anchor{❨191❩}@c
+@macrosubindex{@ampchar{}new}@c
+Placeholder macro for newly allocated output variables.  Using (@ampchar{}NEW VARIABLE) allocates a new array within the scope of the outer macro@comma{} and is usually used for output.  See @ampchar{}ARRAY-OUT and @ampchar{}ARRAY-IN/OUT.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@end table
+@end deffn
+@deffn {Macro} {@ampchar{}work} (size &optional type)
+@anchor{❨302❩}@c
+@macrosubindex{@ampchar{}work}@c
+Allocate a work area of SIZE.  When TYPE is not given@comma{} the call's default is used.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@end table
+@end deffn
+@deffn {Macro} {@ampchar{}work-query} (&optional type)
+@anchor{❨319❩}@c
+@macrosubindex{@ampchar{}work-query}@c
+Work area query@comma{} takes the place of TWO fortran arguments.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@end table
+@end deffn
+@deffn {Macro} {array-clause%} ((array internal-type clause-element-type clause-internal-type) &body body)
+@anchor{❨197❩}@c
+@macrosubindex{array-clause%}@c
+Macro that generates a lambda form that can bed used in EXPAND-SPECIFICATIONS%.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨9❩, , @t{foreign-memory.lisp}}.
+@end table
+@end deffn
+@deffn {Macro} {blas-call} ((name type &optional value return-types) &body forms)
+@anchor{❨254❩}@c
+@macrosubindex{blas-call}@c
+BLAS call.  NAME is either a string or a list of two strings (real/complex).  TYPE (internal-type) selects the function to call.  VALUE is the form returned after the call.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@end table
+@end deffn
+@deffn {Macro} {define-factorization-eops%} (type conversion)
+@anchor{❨187❩}@c
+@macrosubindex{define-factorization-eops%}@c
+Define elementwise operations for TYPE@comma{} trying to convert into arrays.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Macro} {define-foreign-aref} ()
+@anchor{❨223❩}@c
+@macrosubindex{define-foreign-aref}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨9❩, , @t{foreign-memory.lisp}}.
+@end table
+@end deffn
+@deffn {Macro} {define-matrix-square-root-scalar-multiplication} (type &key make)
+@anchor{❨237❩}@c
+@macrosubindex{define-matrix-square-root-scalar-multiplication}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Macro} {lapack-call} ((name type value) &body forms)
+@anchor{❨294❩}@c
+@macrosubindex{lapack-call}@c
+LAPACK call@comma{} takes an @ampchar{}info argument.  NAME is either a string or a list of two strings (real/complex).  TYPE (internal-type) selects the function to call.  VALUE is the form returned after the call.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@end table
+@end deffn
+@deffn {Macro} {lapack-call-w/query} ((name type value) &body forms)
+@anchor{❨257❩}@c
+@macrosubindex{lapack-call-w/query}@c
+LAPACK call which also takes @ampchar{}work-query arguments (in place of two FORTRAN arguments).
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@end table
+@end deffn
+@deffn {Macro} {log-with-sign%} (value sign-changes block-name)
+@anchor{❨292❩}@c
+@macrosubindex{log-with-sign%}@c
+Log of (ABS VALUE)@comma{} increments SIGN-CHANGES when negative@comma{} return-from block-name (values nil 0) when zero.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@end table
+@end deffn
+@deffn {Macro} {with-array-input} (((pointer &optional copied?) array internal-type transpose? force-copy?) &body body)
+@anchor{❨184❩}@c
+@macrosubindex{with-array-input}@c
+Ensure that ARRAY is mapped to a corresponding memory area for the duration of BODY (see below for details of semantics).  POINTER is bound to the start of the memory address.  The representation of values in the memory is determined by INTERNAL-TYPE.  When TRANSPOSE?@comma{} transpose the array before BODY (only works for matrices@comma{} otherwise signal an error).
+
+If FORCE-COPY? is false@comma{} POINTER may or may not point to the memory backing ARRAY.@*
+
+If FORCE-COPY? is true@comma{} POINTER always points to a copy of the contents of ARRAY.@*
+
+COPIED? is bound to indicate whether POINTER points to a copy or the actual array contents.@*
+
+The value of the expression is always the value of BODY.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨10❩, , @t{pinned-array.lisp}}.
+@end table
+@end deffn
+@deffn {Macro} {with-array-input-output} (((pointer &optional copied?) input-array input-internal-type input-transpose? input-force-copy? output-array output-internal-type output-transpose?) &body body)
+@anchor{❨174❩}@c
+@macrosubindex{with-array-input-output}@c
+Similar to WITH-ARRAY-INPUT@comma{} it also ensures that OUTPUT-ARRAY contains the contents the memory area pointed to by POINTER when BODY is finished. If  OUTPUT-ARRAY is NIL then it is equivalent to WITH-ARRAY-INPUT.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨10❩, , @t{pinned-array.lisp}}.
+@end table
+@end deffn
+@deffn {Macro} {with-array-output} (((pointer &optional copied?) array internal-type transpose?) &body body)
+@anchor{❨173❩}@c
+@macrosubindex{with-array-output}@c
+Ensure that ARRAY is mapped to a corresponding memory area for the duration of BODY (see below for details of semantics).  POINTER is bound to the start of the memory address.  The representation of values in the memory is determined by INTERNAL-TYPE.  When TRANSPOSE?@comma{} transpose the array after BODY (only works for matrices@comma{} otherwise signal an error).
+
+COPIED? is bound to indicate whether POINTER points to a copy or the actual array contents.@*
+
+The value of the expression is always the value of BODY.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨10❩, , @t{pinned-array.lisp}}.
+@end table
+@end deffn
+@deffn {Macro} {with-fortran-atom} ((pointer value type output) &body body)
+@anchor{❨296❩}@c
+@macrosubindex{with-fortran-atom}@c
+Allocate memory for internal TYPE and set it to VALUE for body@comma{} which can use POINTER to access it.  When OUTPUT is given@comma{} the value is assigned to it after BODY.  The atom is automatically coerced to the correct type (by FOREIGN-AREF).
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨9❩, , @t{foreign-memory.lisp}}.
+@end table
+@end deffn
+@deffn {Macro} {with-fortran-character} ((pointer character) &body body)
+@anchor{❨157❩}@c
+@macrosubindex{with-fortran-character}@c
+Make character available in an allocated memory area at POINTER for BODY.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨9❩, , @t{foreign-memory.lisp}}.
+@end table
+@end deffn
+@deffn {Macro} {with-pinned-array} ((pointer array) &body body)
+@anchor{❨276❩}@c
+@macrosubindex{with-pinned-array}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨10❩, , @t{pinned-array.lisp}}.
+@end table
+@end deffn
+@deffn {Macro} {with-work-area} ((pointer internal-type size) &body body)
+@anchor{❨299❩}@c
+@macrosubindex{with-work-area}@c
+Allocate a work area of SIZE and INTERNAL-TYPE@comma{} and bind the POINTER to its start during BODY.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨10❩, , @t{pinned-array.lisp}}.
+@end table
+@end deffn
+
+@node Private ordinary functions, Private generic functions, Private macros, Internals
+@subsection Ordinary functions
+@deffn {Function} {absolute-square-type} (internal-type)
+@anchor{❨248❩}@c
+@functionsubindex{absolute-square-type}@c
+Type of (* x (conjugate x)).
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨8❩, , @t{types.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {all-from-specifications%} ()
+@anchor{❨259❩}@c
+@functionsubindex{all-from-specifications%}@c
+Return an optimization specification for all functions that copy from foreign memory.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨9❩, , @t{foreign-memory.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {all-to-specifications%} ()
+@anchor{❨245❩}@c
+@functionsubindex{all-to-specifications%}@c
+Return an optimization specification for all functions that copy to foreign memory.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨9❩, , @t{foreign-memory.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {argument-pointers} (arguments)
+@anchor{❨256❩}@c
+@functionsubindex{argument-pointers}@c
+Return the list of pointers for all the arguments.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {arguments-for-cffi} (arguments)
+@anchor{❨325❩}@c
+@functionsubindex{arguments-for-cffi}@c
+Return a list that can be use in a CFFI call.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {array-float-type} (array)
+@anchor{❨258❩}@c
+@functionsubindex{array-float-type}@c
+Return an (internal) float type for an array.  O(1) when the type can be detected from the specialized array element type@comma{} O(n) otherwise.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨8❩, , @t{types.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {assert-single-lapack-info} (arguments)
+@anchor{❨260❩}@c
+@functionsubindex{assert-single-lapack-info}@c
+Assert that there is at most one LAPACK-INFO in ARGUMENTS.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {backing-array} (array)
+@anchor{❨233❩}@c
+@functionsubindex{backing-array}@c
+Return the array in which the contents of ARRAY are stored. For simple arrays@comma{} this is always the array itself.  The second value is the displacement.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨10❩, , @t{pinned-array.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {blas-lapack-call-form} (type-var name arguments &optional return-types)
+@anchor{❨217❩}@c
+@functionsubindex{blas-lapack-call-form}@c
+Return a form BLAS/LAPACK calls@comma{} conditioning on TYPE-VAR.  See BLAS-LAPACK-FUNCTION-NAME for the interpretation of FIXME
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {blas-lapack-function-name} (type name)
+@anchor{❨159❩}@c
+@functionsubindex{blas-lapack-function-name}@c
+Return the BLAS/LAPACK foreign function name.  TYPE is the internal type@comma{} NAME is one of the following: NAME@comma{} (NAME)@comma{} which are used for both complex and real names@comma{} or (REAL-NAME COMPLEX-NAME).
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {blas-return-types} (return-types)
+@anchor{❨309❩}@c
+@functionsubindex{blas-return-types}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {cholesky-left} (instance)
+@anchor{❨312❩}@c
+@functionsubindex{cholesky-left}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {(setf cholesky-left)} (instance)
+@anchor{❨313❩}@c
+@functionsubindex{(setf cholesky-left)}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {cholesky-p} (object)
+@anchor{❨185❩}@c
+@functionsubindex{cholesky-p}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {common-float-type} (&rest arrays-or-numbers)
+@anchor{❨168❩}@c
+@functionsubindex{common-float-type}@c
+Return the common (internal) float type for the arguments.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨8❩, , @t{types.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {complex?} (internal-type)
+@anchor{❨225❩}@c
+@functionsubindex{complex?}@c
+True iff the internal type is complex.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨8❩, , @t{types.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {copy-array-from-memory} (array pointer internal-type)
+@anchor{❨314❩}@c
+@functionsubindex{copy-array-from-memory}@c
+Copy the memory area of type INTERNAL-TYPE at POINTER to ARRAY.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨9❩, , @t{foreign-memory.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {copy-array-to-memory} (array pointer internal-type)
+@anchor{❨218❩}@c
+@functionsubindex{copy-array-to-memory}@c
+Copy the contents of ARRAY to the memory area of type INTERNAL-TYPE at POINTER.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨9❩, , @t{foreign-memory.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {copy-cholesky} (instance)
+@anchor{❨236❩}@c
+@functionsubindex{copy-cholesky}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {copy-matrix-square-root} (instance)
+@anchor{❨242❩}@c
+@functionsubindex{copy-matrix-square-root}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {copy-spectral-factorization} (instance)
+@anchor{❨311❩}@c
+@functionsubindex{copy-spectral-factorization}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {copy-svd} (instance)
+@anchor{❨188❩}@c
+@functionsubindex{copy-svd}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {count-permutations%} (ipiv-internal)
+@anchor{❨318❩}@c
+@functionsubindex{count-permutations%}@c
+Count the permutations in a pivoting vector.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {create-array-from-memory} (pointer internal-type dimensions &optional element-type)
+@anchor{❨180❩}@c
+@functionsubindex{create-array-from-memory}@c
+Create an array from contents at POINTER.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨9❩, , @t{foreign-memory.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {create-transposed-matrix-from-memory} (pointer internal-type dimensions &optional element-type)
+@anchor{❨240❩}@c
+@functionsubindex{create-transposed-matrix-from-memory}@c
+Create a matrix from transposed contents at POINTER.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨9❩, , @t{foreign-memory.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {default-libraries} ()
+@anchor{❨265❩}@c
+@functionsubindex{default-libraries}@c
+Return a list of libraries.  The source conditions on the platform@comma{} relying TRIVIAL-FEATURES.  This function is only called when the libraries were not configured by the user@comma{} see the documentation on how to do that.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨5❩, , @t{configuration.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {diagonal-log-sum%} (matrix &optional sign-changes)
+@anchor{❨307❩}@c
+@functionsubindex{diagonal-log-sum%}@c
+Sum of the log of the elements in the diagonal.  Sign-changes counts the negative values@comma{} and may be started at something else than 0 (eg in case of pivoting).  Return (values NIL 0) in case of encountering a 0.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {dimensions-as-matrix} (array orientation)
+@anchor{❨304❩}@c
+@functionsubindex{dimensions-as-matrix}@c
+If ARRAY is a vector@comma{} return its dimensions as a matrix with given ORIENTATION (:ROW or :COLUMN) as multiple values@comma{} and T as the third value.  If it is matrix@comma{} just return the dimensions and NIL.  Used for considering vectors as conforming matrices (eg see MM).
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {epsilon} (internal-type)
+@anchor{❨306❩}@c
+@functionsubindex{epsilon}@c
+Return the float epsilon for the given internal float type.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨8❩, , @t{types.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {expand-specifications%} (clause specifications)
+@anchor{❨277❩}@c
+@functionsubindex{expand-specifications%}@c
+Expand specifications using (clause internal-type element-type).
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨9❩, , @t{foreign-memory.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {foreign-size} (type)
+@anchor{❨198❩}@c
+@functionsubindex{foreign-size}@c
+Return the size of an internal type in bytes.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨9❩, , @t{foreign-memory.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {fortran-argument/new-variable} (form)
+@anchor{❨315❩}@c
+@functionsubindex{fortran-argument/new-variable}@c
+If FORM is (@ampchar{}NEW VARIABLE)@comma{} return VARIABLE@comma{} otherwise NIL.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {invert-triangular%} (a upper? unit-diag?)
+@anchor{❨241❩}@c
+@functionsubindex{invert-triangular%}@c
+Invert a dense (triangular) matrix using the LAPACK routine *TRTRI.  UPPER? indicates if the matrix is in the upper or the lower triangle of a matrix@comma{} UNIT-DIAG? indicates whether the diagonal is supposed to consist of 1s.  For internal use@comma{} not exported.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {lapack-info-wrap-argument} (argument body)
+@anchor{❨278❩}@c
+@functionsubindex{lapack-info-wrap-argument}@c
+Generate a wrapper for a LAPACK INFO argument@comma{} also checking the result and raising a condition if applicable.  Useful for WRAP-ARGUMENT.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {last-rows-ss} (matrix nrhs common-type)
+@anchor{❨176❩}@c
+@functionsubindex{last-rows-ss}@c
+Calculate the sum of squares of the last rows of MATRIX columnwise@comma{}@*
+omitting the first NRHS rows.  If MATRIX is a vector@comma{} just do this for the last elements.  Used for interfacing with xGELS.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {least-squares-qr} (y x &key &allow-other-keys)
+@anchor{❨252❩}@c
+@functionsubindex{least-squares-qr}@c
+Least squares using QR decomposition.  Additional values returned: the QR decomposition of X.  See LEAST-SQUARES for additional documentation.  Usage note: SVD-based methods are recommended over this one@comma{} unless X is well-conditioned.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {lisp-type} (internal-type)
+@anchor{❨247❩}@c
+@functionsubindex{lisp-type}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨8❩, , @t{types.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {make-cholesky} (left)
+@anchor{❨268❩}@c
+@functionsubindex{make-cholesky}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {make-cholesky%} (left)
+@anchor{❨216❩}@c
+@functionsubindex{make-cholesky%}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {make-matrix-square-root} (left)
+@anchor{❨171❩}@c
+@functionsubindex{make-matrix-square-root}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {make-spectral-factorization} (&key z w)
+@anchor{❨199❩}@c
+@functionsubindex{make-spectral-factorization}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {make-svd} (&key u d vt)
+@anchor{❨297❩}@c
+@functionsubindex{make-svd}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Reader} {matrix-square-root-left} (instance)
+@anchor{❨321❩}@c
+@functionsubindex{matrix-square-root-left}@c
+@deffnx {Writer} {(setf matrix-square-root-left)} (instance)
+@anchor{❨322❩}@c
+@functionsubindex{(setf matrix-square-root-left)}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@item Target Slot
+@ref{❨33❩, , @t{left}}.
+@end table
+@end deffn
+@deffn {Function} {matrix-square-root-p} (object)
+@anchor{❨234❩}@c
+@functionsubindex{matrix-square-root-p}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {maybe-default-type} (type parameters)
+@anchor{❨261❩}@c
+@functionsubindex{maybe-default-type}@c
+Return default type from PARAMETERS when TYPE is NIL.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {mm-hermitian%} (a transpose-left?)
+@anchor{❨310❩}@c
+@functionsubindex{mm-hermitian%}@c
+Calculate A*op(A) if TRANSPOSE-LEFT? is NIL@comma{} and op(A)*A otherwise.  op() is always conjugate transpose@comma{} but may be implemented as a transpose if A is real@comma{} in which case the two are equivalent.  This function is meant to be used internally@comma{} and is not exported.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {number-float-type} (number)
+@anchor{❨284❩}@c
+@functionsubindex{number-float-type}@c
+Return an (internal) float type for a number.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨8❩, , @t{types.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {output-array-form} (form)
+@anchor{❨183❩}@c
+@functionsubindex{output-array-form}@c
+Return a form that can be passed to WITH-OUTPUT-ARRAY (or similar) as an output.  The variable is extracted from @ampchar{}NEW forms@comma{} otherwise the form is passed as is.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {process-forms} (forms environment)
+@anchor{❨175❩}@c
+@functionsubindex{process-forms}@c
+Process forms and return a list of argument specifications.  A form may correspond to multiple arguments.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {query-configuration} (indicator &optional default)
+@anchor{❨279❩}@c
+@functionsubindex{query-configuration}@c
+Return the property for INDICATOR from the configuration variable@comma{} with an optional default@comma{} which can be a function (called on demand).
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨4❩, , @t{configuration-interface.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {set-feature} (symbol set?)
+@anchor{❨293❩}@c
+@functionsubindex{set-feature}@c
+Ensure that symbol is in *FEATURES* iff SET?.  Returns no values.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨4❩, , @t{configuration-interface.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {shareable-array?} (array internal-type)
+@anchor{❨264❩}@c
+@functionsubindex{shareable-array?}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨10❩, , @t{pinned-array.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {spectral-factorization-p} (object)
+@anchor{❨267❩}@c
+@functionsubindex{spectral-factorization-p}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {sum-diagonal%} (array)
+@anchor{❨253❩}@c
+@functionsubindex{sum-diagonal%}@c
+Sum diagonal of array@comma{} checking that it is square.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {svd-p} (object)
+@anchor{❨156❩}@c
+@functionsubindex{svd-p}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {transpose-matrix-from-memory} (matrix pointer internal-type)
+@anchor{❨287❩}@c
+@functionsubindex{transpose-matrix-from-memory}@c
+Transpose the contents of ARRAY to the memory area of type INTERNAL-TYPE at POINTER.  VECTORs are also handled.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨9❩, , @t{foreign-memory.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {transpose-matrix-to-memory} (matrix pointer internal-type)
+@anchor{❨305❩}@c
+@functionsubindex{transpose-matrix-to-memory}@c
+Transpose the contents of ARRAY to the memory area of type INTERNAL-TYPE at POINTER.  VECTORs are also handled.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨9❩, , @t{foreign-memory.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {trsm%} (a a-upper? b)
+@anchor{❨266❩}@c
+@functionsubindex{trsm%}@c
+Wrapper for BLAS routine xTRSM.  Solve AX=B@comma{} where A is triangular.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨13❩, , @t{linear-algebra.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {value-from-memory%} (internal-type)
+@anchor{❨186❩}@c
+@functionsubindex{value-from-memory%}@c
+Return a (LAMBDA (POINTER INDEX) ...) form that can be used to read an element from an array in memory.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨9❩, , @t{foreign-memory.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {value-to-memory%} (internal-type)
+@anchor{❨255❩}@c
+@functionsubindex{value-to-memory%}@c
+Return a (LAMBDA (POINTER INDEX VALUE) ...) form that can be used to write an element to an array in memory.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨9❩, , @t{foreign-memory.lisp}}.
+@end table
+@end deffn
+@deffn {Function} {wrap-arguments} (arguments pass parameters body)
+@anchor{❨300❩}@c
+@functionsubindex{wrap-arguments}@c
+Wrap BODY in arguments.  Convenience function used to implement the expansion.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@end table
+@end deffn
+
+@node Private generic functions, Private classes, Private ordinary functions, Internals
+@subsection Generic functions
+@deffn {Generic Reader} {argument-pointer} (object)
+@anchor{❨262❩}@c
+@genericsubindex{argument-pointer}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Methods
+@deffn {Reader Method} {argument-pointer} ((fortran-argument @ref{❨323❩, , @t{fortran-argument}}))
+@anchor{❨263❩}@c
+@methodsubindex{argument-pointer}@c
+Pointer passed to FORTRAN.
+@table @strong
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@item Target Slot
+@ref{❨324❩, , @t{pointer}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Reader} {factor} (object)
+@anchor{❨250❩}@c
+@genericsubindex{factor}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Methods
+@deffn {Reader Method} {factor} ((hermitian-factorization @ref{❨22❩, , @t{hermitian-factorization}}))
+@anchor{❨251❩}@c
+@methodsubindex{factor}@c
+see documentation of *SYTRF and *HETRF@comma{} storage is@*
+           in the half specified by HERMITIAN-ORIENTATION and otherwise
+           treated as opaque.
+@table @strong
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@item Target Slot
+@ref{❨23❩, , @t{factor}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {fortran-argument/output-initializer-form} (argument parameters)
+@anchor{❨280❩}@c
+@genericsubindex{fortran-argument/output-initializer-form}@c
+When applicable@comma{} return a form that is used to initialize the OUTPUT variable.  When NIL is returned@comma{} no binding is established.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@item Methods
+@deffn {Method} {fortran-argument/output-initializer-form} ((argument @ref{❨249❩, , @t{fortran-input-output-array}}) parameters)
+@anchor{❨281❩}@c
+@methodsubindex{fortran-argument/output-initializer-form}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {fortran-argument/output-initializer-form} ((argument @ref{❨192❩, , @t{fortran-output-array}}) parameters)
+@anchor{❨282❩}@c
+@methodsubindex{fortran-argument/output-initializer-form}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {fortran-argument/output-initializer-form} ((argument @ref{❨181❩, , @t{fortran-argument/output}}) parameters)
+@anchor{❨283❩}@c
+@methodsubindex{fortran-argument/output-initializer-form}@c
+@table @strong
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Reader} {ipiv-internal} (object)
+@anchor{❨316❩}@c
+@genericsubindex{ipiv-internal}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Methods
+@deffn {Reader Method} {ipiv-internal} ((ipiv-mixin @ref{❨189❩, , @t{ipiv-mixin}}))
+@anchor{❨317❩}@c
+@methodsubindex{ipiv-internal}@c
+pivot indices in LAPACK's representation@comma{} counting from 1
+@table @strong
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@item Target Slot
+@ref{❨190❩, , @t{ipiv-internal}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Reader} {lu-matrix} (object)
+@anchor{❨177❩}@c
+@genericsubindex{lu-matrix}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Methods
+@deffn {Reader Method} {lu-matrix} ((lu @ref{❨69❩, , @t{lu}}))
+@anchor{❨178❩}@c
+@methodsubindex{lu-matrix}@c
+matrix storing the transpose of the LU factorization.
+@table @strong
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@item Target Slot
+@ref{❨70❩, , @t{lu}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {permutations} (object)
+@anchor{❨285❩}@c
+@genericsubindex{permutations}@c
+Return the number of permutations in object (which is usually a matrix factorization@comma{} or a pivot index.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@item Methods
+@deffn {Method} {permutations} ((lu @ref{❨69❩, , @t{lu}}))
+@anchor{❨286❩}@c
+@methodsubindex{permutations}@c
+@table @strong
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {process-form} (form environment)
+@anchor{❨269❩}@c
+@genericsubindex{process-form}@c
+Return a list of argument specifications (atoms are converted into lists).@*
+
+The code in this file defines a DSL for calling BLAS and LAPACK procedures in FORTRAN@comma{} which expect pointers to memory locations.  The high-level macros BLAS-CALL and LAPACK-CALL take care of pinning arrays or allocating memory and copying array contents (when applicable)@comma{} and use PROCESS-FORM to interpret their arguments@comma{} which correspond to one or more FORTRAN arguments.  These are then expanded into code using WRAP-ARGUMENT.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@item Methods
+@deffn {Method} {process-form} ((form @t{(eql 1)}) env)
+@anchor{❨270❩}@c
+@methodsubindex{process-form}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {process-form} ((form @t{(eql 0)}) env)
+@anchor{❨271❩}@c
+@methodsubindex{process-form}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {process-form} ((form @t{character}) env)
+@anchor{❨272❩}@c
+@methodsubindex{process-form}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {process-form} ((form @t{null}) environment)
+@anchor{❨273❩}@c
+@methodsubindex{process-form}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {process-form} (form environment)
+@anchor{❨274❩}@c
+@methodsubindex{process-form}@c
+@table @strong
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Reader} {tau} (object)
+@anchor{❨219❩}@c
+@genericsubindex{tau}@c
+@deffnx {Generic Writer} {(setf tau)} (object)
+@anchor{❨221❩}@c
+@genericsubindex{(setf tau)}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Methods
+@deffn {Reader Method} {tau} ((qr @ref{❨29❩, , @t{qr}}))
+@anchor{❨220❩}@c
+@methodsubindex{tau}@c
+@deffnx {Writer Method} {(setf tau)} ((qr @ref{❨29❩, , @t{qr}}))
+@anchor{❨222❩}@c
+@methodsubindex{(setf tau)}@c
+complex scalar for elementary reflectors (see documentation of xGEQRF).
+@table @strong
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@item Target Slot
+@ref{❨31❩, , @t{tau}}.
+@end table
+@end deffn
+@end table
+@end deffn
+@deffn {Generic Function} {wrap-argument} (argument pass parameters body)
+@anchor{❨200❩}@c
+@genericsubindex{wrap-argument}@c
+Return BODY wrapped in an environment generated for ARGUMENT in a given PASS.@*
+
+The code for calling the function is built using nested calls of WRAP-ARGUMENT.  The setup is somewhat complicated because some functions require that they are called twice (eg in order to calculate work area size)@comma{} and we don't necessarily want to allocate and free memory twice.  Because of this@comma{} expansions take place in 'passes'.
+
+Currently@comma{} the following passes are used:@*
+
+ - BINDINGS: establishes the bindings (also empty variables)@*
+
+ - MAIN: for arguments that are the same regardless of what kind of call is made@*
+
+ - QUERY: for querying work area sizes@*
+
+ - CALL: the actual function call@*
+
+PARAMETERS is used to specify information that is applicable for all arguments (eg a default array element type).
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@item Methods
+@deffn {Method} {wrap-argument} ((argument @ref{❨291❩, , @t{lapack-work-query-size}}) (pass @t{(eql lla::call)}) parameters body)
+@anchor{❨201❩}@c
+@methodsubindex{wrap-argument}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {wrap-argument} ((argument @ref{❨308❩, , @t{lapack-work-query-area}}) (pass @t{(eql lla::call)}) parameters body)
+@anchor{❨202❩}@c
+@methodsubindex{wrap-argument}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {wrap-argument} ((argument @ref{❨291❩, , @t{lapack-work-query-size}}) (pass @t{(eql lla::query)}) parameters body)
+@anchor{❨203❩}@c
+@methodsubindex{wrap-argument}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {wrap-argument} ((argument @ref{❨308❩, , @t{lapack-work-query-area}}) (pass @t{(eql lla::query)}) parameters body)
+@anchor{❨204❩}@c
+@methodsubindex{wrap-argument}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {wrap-argument} ((argument @ref{❨308❩, , @t{lapack-work-query-area}}) (pass @t{(eql lla::bindings)}) parameters body)
+@anchor{❨205❩}@c
+@methodsubindex{wrap-argument}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {wrap-argument} ((argument @ref{❨230❩, , @t{lapack-info}}) (pass @t{(eql lla::query)}) parameters body)
+@anchor{❨206❩}@c
+@methodsubindex{wrap-argument}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {wrap-argument} ((argument @ref{❨230❩, , @t{lapack-info}}) (pass @t{(eql lla::call)}) parameters body)
+@anchor{❨207❩}@c
+@methodsubindex{wrap-argument}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {wrap-argument} ((argument @ref{❨172❩, , @t{fortran-work-area}}) (pass @t{(eql lla::main)}) parameters body)
+@anchor{❨208❩}@c
+@methodsubindex{wrap-argument}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {wrap-argument} ((argument @ref{❨249❩, , @t{fortran-input-output-array}}) (pass @t{(eql lla::main)}) parameters body)
+@anchor{❨209❩}@c
+@methodsubindex{wrap-argument}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {wrap-argument} ((argument @ref{❨192❩, , @t{fortran-output-array}}) (pass @t{(eql lla::main)}) parameters body)
+@anchor{❨210❩}@c
+@methodsubindex{wrap-argument}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {wrap-argument} ((argument @ref{❨163❩, , @t{fortran-input-array}}) (pass @t{(eql lla::main)}) parameters body)
+@anchor{❨211❩}@c
+@methodsubindex{wrap-argument}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {wrap-argument} ((argument @ref{❨226❩, , @t{fortran-atom}}) (pass @t{(eql lla::main)}) parameters body)
+@anchor{❨212❩}@c
+@methodsubindex{wrap-argument}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {wrap-argument} ((argument @ref{❨161❩, , @t{fortran-character}}) (pass @t{(eql lla::main)}) parameters body)
+@anchor{❨213❩}@c
+@methodsubindex{wrap-argument}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {wrap-argument} ((argument @ref{❨181❩, , @t{fortran-argument/output}}) (pass @t{(eql lla::bindings)}) parameters body)
+@anchor{❨214❩}@c
+@methodsubindex{wrap-argument}@c
+@table @strong
+@end table
+@end deffn
+@deffn {Method} {wrap-argument} (argument pass parameters body)
+@anchor{❨215❩}@c
+@methodsubindex{wrap-argument}@c
+@table @strong
+@end table
+@end deffn
+@end table
+@end deffn
+
+@node Private classes, Private types, Private generic functions, Internals
+@subsection Classes
+@deftp {Class} {fortran-argument}
+@anchor{❨323❩}@c
+@classsubindex{fortran-argument}@c
+Superclass of all arguments with pointers.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@item Direct subclasses
+@itemize @bullet
+@item
+@ref{❨181❩, , @t{fortran-argument/output}}.
+@item
+@ref{❨228❩, , @t{fortran-argument/size}}.
+@item
+@ref{❨238❩, , @t{fortran-argument/type}}.
+@item
+@ref{❨161❩, , @t{fortran-character}}.
+@item
+@ref{❨163❩, , @t{fortran-input-array}}.
+@item
+@ref{❨230❩, , @t{lapack-info}}.
+@end itemize
+@item Direct methods
+@ref{❨263❩, , @t{argument-pointer}}.
+@item Direct slots
+@defvr {Slot} {pointer}
+@anchor{❨324❩}@c
+@slotsubindex{pointer}@c
+Pointer passed to FORTRAN.
+@table @strong
+@item Initform
+@t{(gensym)}
+@item Initargs
+@t{:pointer}
+@item Readers
+@ref{❨263❩, , @t{argument-pointer}}.
+@item Writers
+@i{This slot is read-only.}
+@end table
+@end defvr
+@end table
+@end deftp
+@deftp {Class} {fortran-argument/output}
+@anchor{❨181❩}@c
+@classsubindex{fortran-argument/output}@c
+Class for arguments that return an output.  When FORTRAN-ARGUMENT/OUTPUT-INITIALIZER-FORM returns non-NIL@comma{} a local binding of OUTPUT to this form will be wrapped around the relevant BODY.  Also see @ampchar{}NEW.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@item Direct superclasses
+@ref{❨323❩, , @t{fortran-argument}}.
+@item Direct subclasses
+@itemize @bullet
+@item
+@ref{❨226❩, , @t{fortran-atom}}.
+@item
+@ref{❨192❩, , @t{fortran-output-array}}.
+@end itemize
+@item Direct methods
+@itemize @bullet
+@item
+@ref{❨283❩, , @t{fortran-argument/output-initializer-form}}.
+@item
+@ref{❨214❩, , @t{wrap-argument}}.
+@end itemize
+@item Direct slots
+@defvr {Slot} {output}
+@anchor{❨182❩}@c
+@slotsubindex{output}@c
+Lisp variable or initialization form mapped to an output.
+@table @strong
+@item Initargs
+@t{:output}
+@end table
+@end defvr
+@end table
+@end deftp
+@deftp {Class} {fortran-argument/size}
+@anchor{❨228❩}@c
+@classsubindex{fortran-argument/size}@c
+Number of elements in array mapped to a pointer.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@item Direct superclasses
+@ref{❨323❩, , @t{fortran-argument}}.
+@item Direct subclasses
+@itemize @bullet
+@item
+@ref{❨172❩, , @t{fortran-work-area}}.
+@item
+@ref{❨308❩, , @t{lapack-work-query-area}}.
+@item
+@ref{❨291❩, , @t{lapack-work-query-size}}.
+@end itemize
+@item Direct slots
+@defvr {Slot} {size}
+@anchor{❨229❩}@c
+@slotsubindex{size}@c
+Number of elements.
+@table @strong
+@item Initargs
+@t{:size}
+@end table
+@end defvr
+@end table
+@end deftp
+@deftp {Class} {fortran-argument/type}
+@anchor{❨238❩}@c
+@classsubindex{fortran-argument/type}@c
+For arguments which may have multiple types@comma{} mostly arrays or atoms (implemented as single-cell arrays).
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@item Direct superclasses
+@ref{❨323❩, , @t{fortran-argument}}.
+@item Direct subclasses
+@itemize @bullet
+@item
+@ref{❨226❩, , @t{fortran-atom}}.
+@item
+@ref{❨172❩, , @t{fortran-work-area}}.
+@item
+@ref{❨308❩, , @t{lapack-work-query-area}}.
+@end itemize
+@item Direct slots
+@defvr {Slot} {type}
+@anchor{❨239❩}@c
+@slotsubindex{type}@c
+Determines (internal) type for array mapped to the pointer.
+@table @strong
+@item Package
+@t{common-lisp}.
+@item Initargs
+@t{:type}
+@end table
+@end defvr
+@end table
+@end deftp
+@deftp {Class} {fortran-atom}
+@anchor{❨226❩}@c
+@classsubindex{fortran-atom}@c
+Atoms passed to FORTRAN.  Input/output (when OUTPUT is given).
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@item Direct superclasses
+@itemize @bullet
+@item
+@ref{❨181❩, , @t{fortran-argument/output}}.
+@item
+@ref{❨238❩, , @t{fortran-argument/type}}.
+@end itemize
+@item Direct methods
+@ref{❨212❩, , @t{wrap-argument}}.
+@item Direct slots
+@defvr {Slot} {value}
+@anchor{❨227❩}@c
+@slotsubindex{value}@c
+@table @strong
+@item Initargs
+@t{:value}
+@end table
+@end defvr
+@end table
+@end deftp
+@deftp {Class} {fortran-character}
+@anchor{❨161❩}@c
+@classsubindex{fortran-character}@c
+Character passed to FORTRAN.  Input only@comma{} for specifying triangle orientation@comma{} etc.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@item Direct superclasses
+@ref{❨323❩, , @t{fortran-argument}}.
+@item Direct methods
+@ref{❨213❩, , @t{wrap-argument}}.
+@item Direct slots
+@defvr {Slot} {character}
+@anchor{❨162❩}@c
+@slotsubindex{character}@c
+@table @strong
+@item Package
+@t{common-lisp}.
+@item Initargs
+@t{:character}
+@end table
+@end defvr
+@end table
+@end deftp
+@deftp {Class} {fortran-input-array}
+@anchor{❨163❩}@c
+@classsubindex{fortran-input-array}@c
+Arrays which serve as inputs.  See WITH-ARRAY-INPUT for the semantics of the arguments.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@item Direct superclasses
+@ref{❨323❩, , @t{fortran-argument}}.
+@item Direct subclasses
+@ref{❨249❩, , @t{fortran-input-output-array}}.
+@item Direct methods
+@ref{❨211❩, , @t{wrap-argument}}.
+@item Direct slots
+@defvr {Slot} {input}
+@anchor{❨164❩}@c
+@slotsubindex{input}@c
+@table @strong
+@item Initargs
+@t{:input}
+@end table
+@end defvr
+@defvr {Slot} {input-type}
+@anchor{❨165❩}@c
+@slotsubindex{input-type}@c
+@table @strong
+@item Initargs
+@t{:input-type}
+@end table
+@end defvr
+@defvr {Slot} {input-transpose?}
+@anchor{❨166❩}@c
+@slotsubindex{input-transpose?}@c
+@table @strong
+@item Initargs
+@t{:input-transpose?}
+@end table
+@end defvr
+@defvr {Slot} {input-force-copy?}
+@anchor{❨167❩}@c
+@slotsubindex{input-force-copy?}@c
+@table @strong
+@item Initargs
+@t{:input-force-copy?}
+@end table
+@end defvr
+@end table
+@end deftp
+@deftp {Class} {fortran-input-output-array}
+@anchor{❨249❩}@c
+@classsubindex{fortran-input-output-array}@c
+Input/output array.  See WITH-ARRAY-INPUT-OUTPUT for the semantics of the arguments.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@item Direct superclasses
+@itemize @bullet
+@item
+@ref{❨163❩, , @t{fortran-input-array}}.
+@item
+@ref{❨192❩, , @t{fortran-output-array}}.
+@end itemize
+@item Direct methods
+@itemize @bullet
+@item
+@ref{❨281❩, , @t{fortran-argument/output-initializer-form}}.
+@item
+@ref{❨209❩, , @t{wrap-argument}}.
+@end itemize
+@end table
+@end deftp
+@deftp {Class} {fortran-output-array}
+@anchor{❨192❩}@c
+@classsubindex{fortran-output-array}@c
+Output array.  See WITH-ARRAY-OUTPUT for the semantics of the arguments.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@item Direct superclasses
+@ref{❨181❩, , @t{fortran-argument/output}}.
+@item Direct subclasses
+@ref{❨249❩, , @t{fortran-input-output-array}}.
+@item Direct methods
+@itemize @bullet
+@item
+@ref{❨282❩, , @t{fortran-argument/output-initializer-form}}.
+@item
+@ref{❨210❩, , @t{wrap-argument}}.
+@end itemize
+@item Direct slots
+@defvr {Slot} {output}
+@anchor{❨193❩}@c
+@slotsubindex{output}@c
+@table @strong
+@item Initargs
+@t{:output}
+@end table
+@end defvr
+@defvr {Slot} {output-dimensions}
+@anchor{❨194❩}@c
+@slotsubindex{output-dimensions}@c
+@table @strong
+@item Initargs
+@t{:output-dimensions}
+@end table
+@end defvr
+@defvr {Slot} {output-type}
+@anchor{❨195❩}@c
+@slotsubindex{output-type}@c
+@table @strong
+@item Initargs
+@t{:output-type}
+@end table
+@end defvr
+@defvr {Slot} {output-transpose?}
+@anchor{❨196❩}@c
+@slotsubindex{output-transpose?}@c
+@table @strong
+@item Initargs
+@t{:output-transpose?}
+@end table
+@end defvr
+@end table
+@end deftp
+@deftp {Class} {fortran-work-area}
+@anchor{❨172❩}@c
+@classsubindex{fortran-work-area}@c
+Work area.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@item Direct superclasses
+@itemize @bullet
+@item
+@ref{❨228❩, , @t{fortran-argument/size}}.
+@item
+@ref{❨238❩, , @t{fortran-argument/type}}.
+@end itemize
+@item Direct methods
+@ref{❨208❩, , @t{wrap-argument}}.
+@end table
+@end deftp
+@deftp {Class} {ipiv-mixin}
+@anchor{❨189❩}@c
+@classsubindex{ipiv-mixin}@c
+Mixin class for objects with pivoting.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨11❩, , @t{factorizations.lisp}}.
+@item Direct subclasses
+@itemize @bullet
+@item
+@ref{❨22❩, , @t{hermitian-factorization}}.
+@item
+@ref{❨69❩, , @t{lu}}.
+@end itemize
+@item Direct methods
+@ref{❨317❩, , @t{ipiv-internal}}.
+@item Direct slots
+@defvr {Slot} {ipiv-internal}
+@anchor{❨190❩}@c
+@slotsubindex{ipiv-internal}@c
+pivot indices in LAPACK's representation@comma{} counting from 1
+@table @strong
+@item Type
+@t{vector}
+@item Initargs
+@t{:ipiv-internal}
+@item Readers
+@ref{❨317❩, , @t{ipiv-internal}}.
+@item Writers
+@i{This slot is read-only.}
+@end table
+@end defvr
+@end table
+@end deftp
+@deftp {Class} {lapack-info}
+@anchor{❨230❩}@c
+@classsubindex{lapack-info}@c
+Information from a LAPACK call.  See the LAPACK manual for error codes.
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@item Direct superclasses
+@ref{❨323❩, , @t{fortran-argument}}.
+@item Direct methods
+@itemize @bullet
+@item
+@ref{❨206❩, , @t{wrap-argument}}.
+@item
+@ref{❨207❩, , @t{wrap-argument}}.
+@end itemize
+@item Direct slots
+@defvr {Slot} {condition}
+@anchor{❨231❩}@c
+@slotsubindex{condition}@c
+@table @strong
+@item Package
+@t{common-lisp}.
+@item Initargs
+@t{:condition}
+@end table
+@end defvr
+@defvr {Slot} {variable}
+@anchor{❨232❩}@c
+@slotsubindex{variable}@c
+@table @strong
+@item Package
+@t{common-lisp}.
+@item Initargs
+@t{:variable}
+@end table
+@end defvr
+@end table
+@end deftp
+@deftp {Class} {lapack-work-query-area}
+@anchor{❨308❩}@c
+@classsubindex{lapack-work-query-area}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@item Direct superclasses
+@itemize @bullet
+@item
+@ref{❨228❩, , @t{fortran-argument/size}}.
+@item
+@ref{❨238❩, , @t{fortran-argument/type}}.
+@end itemize
+@item Direct methods
+@itemize @bullet
+@item
+@ref{❨202❩, , @t{wrap-argument}}.
+@item
+@ref{❨204❩, , @t{wrap-argument}}.
+@item
+@ref{❨205❩, , @t{wrap-argument}}.
+@end itemize
+@end table
+@end deftp
+@deftp {Class} {lapack-work-query-size}
+@anchor{❨291❩}@c
+@classsubindex{lapack-work-query-size}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨12❩, , @t{fortran-call.lisp}}.
+@item Direct superclasses
+@ref{❨228❩, , @t{fortran-argument/size}}.
+@item Direct methods
+@itemize @bullet
+@item
+@ref{❨201❩, , @t{wrap-argument}}.
+@item
+@ref{❨203❩, , @t{wrap-argument}}.
+@end itemize
+@end table
+@end deftp
+
+@node Private types, , Private classes, Internals
+@subsection Types
+@deftp {Type} {float-type} ()
+@anchor{❨244❩}@c
+@typesubindex{float-type}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨8❩, , @t{types.lisp}}.
+@end table
+@end deftp
+@deftp {Type} {internal-type} ()
+@anchor{❨295❩}@c
+@typesubindex{internal-type}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨8❩, , @t{types.lisp}}.
+@end table
+@end deftp
+@deftp {Type} {maximum-array-size} ()
+@anchor{❨290❩}@c
+@typesubindex{maximum-array-size}@c
+@table @strong
+@item Package
+@ref{❨15❩, , @t{lla}}.
+@item Source
+@ref{❨9❩, , @t{foreign-memory.lisp}}.
+@end table
+@end deftp
+
+
+
+@c ====================================================================
+@c Indexes
+@c ====================================================================
+@node Indexes, , Definitions, Top
+@appendix Indexes
+@menu
+* Concept index::
+* Function index::
+* Variable index::
+* Data type index::
+@end menu
+
+
+@c -------------
+@c Concept index
+@c -------------
+@node Concept index, Function index, Indexes, Indexes
+@appendixsec Concepts
+@printindex cp
+
+@page
+
+
+@c --------------
+@c Function index
+@c --------------
+@node Function index, Variable index, Concept index, Indexes
+@appendixsec Functions
+@printindex fn
+
+@page
+
+
+@c --------------
+@c Variable index
+@c --------------
+@node Variable index, Data type index, Function index, Indexes
+@appendixsec Variables
+@printindex vr
+
+@page
+
+
+@c ---------------
+@c Data type index
+@c ---------------
+@node Data type index, , Variable index, Indexes
+@appendixsec Data types
+@printindex tp
+
+@bye
+
+@c lla.texi ends here

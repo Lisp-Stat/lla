@@ -1,0 +1,8 @@
+LLA is a high-level Common Lisp library built on on BLAS and LAPACK, but providing a more abstract interface with the purpose of freeing the user from low-level concerns and reducing the number of bugs in numerical code.
+
+There are four main objectives:
+
+- Provide a high-level, user friendly, interface that hides the details.
+- Stay in Lisp and expose the innards of the objects as much as possible.
+- Keeping it simple; LLA is only about 3000 lines of code.
+- Speed is important, but reliability comes first.

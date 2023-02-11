@@ -1,5 +1,5 @@
-;;; -*- Mode:Lisp; Syntax:ANSI-Common-Lisp; Coding:utf-8 -*-
-
+;;; -*- Mode: LISP; Syntax: Ansi-Common-Lisp; Base: 10; Package: LLA -*-
+;;; Copyright (c) 2023 Symbolics Pte. Ltd. All rights reserved.
 (in-package #:lla)
 
 ;;; ********************************************************************
@@ -11,7 +11,7 @@
   "Return a list of libraries.  The source conditions on the platform, relying TRIVIAL-FEATURES.  This function is only called when the libraries were not configured by the user, see the documentation on how to do that."
   #+linux '((:or "libblas.so.3gf" "libblas.so")
             (:or "liblapack.so.3gf" "liblapack.so"))
-  #+windows '("libblas.dll" "liblapack.dll")
+  #+windows '("libopenblas.dll")
   #+darwin '("libblas.dylib" "liblapack.dylib")
   #-(or linux windows darwin) '((:default "libblas") (:default "liblapack")))
 
@@ -28,3 +28,4 @@
                                :array-type)
     (enable-efficiency-warning 'lla::efficiency-warning-array-conversion
                                :array-conversion)))
+

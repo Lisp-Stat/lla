@@ -1,10 +1,12 @@
-;;; -*- Mode:Lisp; Syntax:ANSI-Common-Lisp; Coding:utf-8 -*-
-
+;;; -*- Mode: LISP; Syntax: Ansi-Common-Lisp; Base: 10; Package: LLA -*-
+;;; Copyright (c) 2023 Symbolics Pte. Ltd. All rights reserved.
 (in-package #:lla)
 
 ;;;; Lambda forms for accessing foreign memory.
 ;;;
 ;;; These are used to define the functions that access values in foreign memory.  It would be really convenient to use CFFI:MEM-AREF directly, but unfortunately C99 complex types are not (yet) supported (as of Oct 2011).  When they are available directly, we can eliminate these functions completely.  In the meantime, the compiler should be able to reduce the lambda forms, creating efficient code.
+;;; See: https://github.com/cffi/cffi/issues/201
+;;;      https://github.com/quil-lang/magicl/issues/62
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (deftype maximum-array-size ()

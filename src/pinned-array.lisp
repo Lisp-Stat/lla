@@ -1,9 +1,11 @@
-(in-package :lla)
+;;; -*- Mode: LISP; Syntax: Ansi-Common-Lisp; Base: 10; Package: LLA -*-
+;;; Copyright (c) 2023 Symbolics Pte. Ltd. All rights reserved.
+(in-package #:lla)
 
 ;;;; Interface
 ;;;
 ;;; The following macros provide the abstract interface used by the
-;;; rest of LLA. When implementation-specific speedups (eg shared
+;;; rest of LLA.  When implementation-specific speedups (eg shared
 ;;; arrays) are not available, they fall back to copying.
 
 (defmacro with-array-input (((pointer &optional (copied? (gensym "COPIED?")))

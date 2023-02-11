@@ -1,4 +1,6 @@
-(in-package :lla)
+;;; -*- Mode: LISP; Syntax: Ansi-Common-Lisp; Base: 10; Package: LLA -*-
+;;; Copyright (c) 2023 Symbolics Pte. Ltd. All rights reserved.
+(in-package #:lla)
 
 ;;;; Wrappers for BLAS linear algebra functions defined here.
 ;;;

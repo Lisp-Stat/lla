@@ -1,8 +1,14 @@
-(in-package :lla)
+;;; -*- Mode: LISP; Syntax: Ansi-Common-Lisp; Base: 10; Package: LLA -*-
+;;; Copyright (c) 2023 Symbolics Pte. Ltd. All rights reserved.
+(in-package #:lla)
 
-;;;; Type synonyms
-;;;
-;;; These are synonyms for types generally recognized by LLA.  Note that LLA works fine with any kind of numbers, but may be faster for array element types it recognizes as it does not have to spend time detecting a common type.  Think of these types as optimization hints when used in MAKE-ARRAY etc.
+;;; Type synonyms
+
+;;; These are synonyms for types generally recognized by LLA.  Note
+;;; that LLA works fine with any kind of numbers, but may be faster
+;;; for array element types it recognizes as it does not have to spend
+;;; time detecting a common type.  Think of these types as
+;;; optimization hints when used in MAKE-ARRAY etc.
 
 (deftype lla-integer ()
   '(signed-byte #-lla::int64 32 #+lla::int64 64))
@@ -15,9 +21,12 @@
 (deftype lla-complex-double ()
   '(complex double-float))
 
-;;;; Internal types
-;;;
-;;; LLA uses these constants and the associated functions to represent types internally.  They are not exported, so we don't worry about name clashes.  The float types are set up so that the common float type can be found using LOGIOR.
+;;; Internal types
+;;
+;; LLA uses these constants and the associated functions to represent
+;; types internally.  They are not exported, so we don't worry about
+;; name clashes.  The float types are set up so that the common float
+;; type can be found using LOGIOR.
 
 (defconstant +single+ 0)
 (defconstant +double+ 1)
@@ -47,9 +56,12 @@
     (+complex-double+ 'lla-complex-double)
     (+integer+ 'lla-integer)))
 
-;;;; Type classification
-;;;
-;;; In order to decide which of the 4 BLAS/LAPACK functions to call, LLA attempts to determine the type of objects it is asked to operate on.  Functions below always return an appropriate float type.
+;;; Type classification
+;;
+;; In order to decide which of the 4 BLAS/LAPACK functions to call,
+;; LLA attempts to determine the type of objects it is asked to
+;; operate on.  Functions below always return an appropriate float
+;; type.
 
 (deftype float-type ()
   '(integer 0 3))
@@ -88,7 +100,8 @@
                    (array (array-float-type object))
                    (t (error 'lla-unhandled-type :object object))))))
 
-;;;; Convenience functions for internal types
+
+;;; Convenience functions for internal types
 
 (defun complex? (internal-type)
   "True iff the internal type is complex."

@@ -1,5 +1,5 @@
-;;; -*- Mode:Lisp; Syntax:ANSI-Common-Lisp; Coding:utf-8 -*-
-
+;;; -*- Mode: LISP; Syntax: Ansi-Common-Lisp; Base: 10; Package: LLA -*-
+;;; Copyright (c) 2023 Symbolics Pte. Ltd. All rights reserved.
 (in-package #:lla)
 
 (defun test-mm (&optional (n 1000000))
@@ -12,7 +12,7 @@
 
 ;;; load-time-value: 12.76
 ;;; without: 24.79
-;;; inline lookup: 22.81 
+;;; inline lookup: 22.81
 ;;; foreign-funcall: 13.218
 
 (time (test-mm))

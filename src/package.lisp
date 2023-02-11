@@ -1,14 +1,16 @@
-(defpackage #:lla
+;;; -*- Mode: LISP; Syntax: Ansi-Common-Lisp; Base: 10; Package: CL-USER -*-
+;;; Copyright (c) 2023 Symbolics Pte. Ltd. All rights reserved.
+
+(uiop:define-package #:lla
   (:use #:common-lisp
         #:alexandria
         #:anaphora
         #:cffi
-        #:cl-num-utils
-        #:cl-slice
+        #:num-utils
+        #:select
         #:let-plus)
-  (:shadow #:invert)                     ; also in CL-SLICE
-  (:shadowing-import-from #:cl-num-utils ; also in ALEXANDRIA
-                          #:mean #:variance #:median)
+  (:shadow #:invert)                     ; also in SELECT
+
   ;; no exports from:
   ;;   configuration-interface
   ;;   configuration

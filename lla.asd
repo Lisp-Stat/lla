@@ -1,22 +1,21 @@
+;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-lisp; Package: CL-USER -*-
 ;;; Copyright Tamas Papp 2010-2011.
-;;;
-;;; Distributed under the Boost Software License, Version 1.0.  (See
-;;; accompanying file LICENSE_1_0.txt or copy at
-;;; http://www.boost.org/LICENSE_1_0.txt)
-;;;
-;;; This copyright notice pertains to all files in this library.
+;;; Copyright (c) 2023 by Symbolics Pte. Ltd. All rights reserved.
 
-(defsystem lla
+(defsystem #:lla
   :description "Lisp Linear Algebra"
-  :version "0.2"
-  :author "Tamas K Papp <tkpapp@gmail.com>, Gábor Melis <mega@retes.hu>"
-  :license "Boost Software License - Version 1.0"
+  :long-description  #.(uiop:read-file-string
+			(uiop:subpathname *load-pathname* "description.text"))
+  :version "0.3.1"
+  :author "Steven Nunez"
+  :license :ML-PL
   :depends-on (#:anaphora
                #:alexandria
                #:cffi
-               #:cl-num-utils
-               #:cl-slice
+               #:num-utils
+               #:select
                #:let-plus)
+  :in-order-to ((test-op (test-op "lla/tests")))
   :pathname #P"src/"
   :serial t
   :components
@@ -33,16 +32,23 @@
    (:file "linear-algebra")
    (:file "blas")))
 
-(defsystem lla-tests
+(defsystem #:lla/tests
   :description "Unit tests for LLA."
-  :author "Tamas K Papp <tkpapp@gmail.com>, Gábor Melis <mega@retes.hu>"
-  :license "Same as LLA--this is part of the LLA library."
+  :author "Steven Nunez"
+  :license :MS-PL
   :depends-on (#:lla
-               #:clunit)
+               #:clunit2
+	       #:select)
   :pathname #P"tests/"
   :serial t
   :components
   ((:file "setup")
    (:file "pinned-array")
    (:file "linear-algebra")
-   (:file "blas")))
+   (:file "blas"))
+  :perform (test-op (o s)
+		    (let ((*print-pretty* t)) ;work around clunit issue #9
+		      (symbol-call :clunit :run-suite
+				   (find-symbol* :tests
+						 :lla-tests)
+					   :use-debugger nil))))

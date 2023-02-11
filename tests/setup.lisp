@@ -1,17 +1,17 @@
-;;; -*- Mode:Lisp; Syntax:ANSI-Common-Lisp; -*-
-(cl:defpackage #:lla-tests
+;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-lisp; Package: CL-USER -*-
+(uiop:define-package #:lla-tests
   (:use #:cl
         #:alexandria
         #:anaphora
-        #:cl-num-utils
-        #:cl-num-utils.matrix-shorthand
-        #:cl-slice
+        #:num-utils
+        #:num-utils.matrix-shorthand
+        #:select
         #:clunit
         #:cffi
         #:let-plus
         #:lla)
   (:shadowing-import-from #:alexandria #:mean #:variance #:median)
-  (:shadowing-import-from #:lla #:invert) ; also in CL-SLICE
+  (:shadowing-import-from #:lla #:invert) ; also in SELECT
   (:export #:run))
 
 (in-package :lla-tests)
