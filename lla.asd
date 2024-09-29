@@ -1,12 +1,13 @@
 ;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-lisp; Package: CL-USER -*-
 ;;; Copyright Tamas Papp 2010-2011.
-;;; Copyright (c) 2023 by Symbolics Pte. Ltd. All rights reserved.
+;;; Copyright (c) 2023,2024 by Symbolics Pte. Ltd. All rights reserved.
+;;; SPDX-License-identifier: MS-PL
 
-(defsystem #:lla
+(defsystem "lla"
   :description "Lisp Linear Algebra"
   :long-description  #.(uiop:read-file-string
 			(uiop:subpathname *load-pathname* "description.text"))
-  :version "0.3.1"
+  :version "0.4.0"
   :author "Steven Nunez"
   :license :ML-PL
   :depends-on (#:anaphora
@@ -32,7 +33,7 @@
    (:file "linear-algebra")
    (:file "blas")))
 
-(defsystem #:lla/tests
+(defsystem "lla/tests"
   :description "Unit tests for LLA."
   :author "Steven Nunez"
   :license :MS-PL
@@ -52,3 +53,8 @@
 				   (find-symbol* :tests
 						 :lla-tests)
 					   :use-debugger nil))))
+
+(defmethod perform :after
+  ((operation load-op) (system (eql (find-system :lla))))
+  "Update *FEATURES* if the system loads successfully."
+  (pushnew :lla common-lisp:*features*))

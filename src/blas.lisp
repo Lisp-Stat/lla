@@ -1,5 +1,6 @@
 ;;; -*- Mode: LISP; Syntax: Ansi-Common-Lisp; Base: 10; Package: LLA -*-
 ;;; Copyright (c) 2023 Symbolics Pte. Ltd. All rights reserved.
+;;; SPDX-License-identifier: MS-PL
 (in-package #:lla)
 
 ;;;; Wrappers for BLAS linear algebra functions defined here.
@@ -65,7 +66,12 @@ M --A--+  -C++
       (&integer ldc))))
 
 (defun scal! (alpha x &key n (incx 1))
-  "X = alpha * X."
+  "Computes the product of a vector by a scalar: x ← α * x
+
+@params{
+@x{a vector of n elements}
+@a{a scalar}}
+"
   (let ((type (array-float-type x))
         (n (cond (n
                   (assert (<= (* n incx) (array-total-size x)))
@@ -76,6 +82,12 @@ M --A--+  -C++
       (&array-in/out (:input x) ()) (&integer incx))))
 
 (defun axpy! (alpha x y &key n (incx 1) (incy 1))
+  "Computes a vector-scalar product and adds the result to a vector: y ← α * x + y
+
+@params{
+@x{a vector of n elements}
+@y{a vector of n element}
+@α(a scalar}}"
   (let ((common-type (common-float-type x y))
         (n (cond (n
                   (assert (<= (* n incx) (array-total-size x)))
@@ -102,6 +114,7 @@ M --A--+  -C++
       (&array-in/out (:input y) ()) (&integer incy))))
 
 (defun dot (x y &key n (incx 1) (incy 1))
+  "Computes a vector-vector dot product"
   (let ((common-type (common-float-type x y))
         (n (cond (n
                   (assert (<= (* n incx) (array-total-size x)))

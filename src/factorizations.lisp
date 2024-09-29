@@ -1,5 +1,6 @@
 ;;; -*- Mode: LISP; Syntax: Ansi-Common-Lisp; Base: 10; Package: LLA -*-
 ;;; Copyright (c) 2023 Symbolics Pte. Ltd. All rights reserved.
+;;; SPDX-License-identifier: MS-PL
 (in-package #:lla)
 
 ;;; pivoting mixin

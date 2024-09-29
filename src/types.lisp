@@ -5,7 +5,7 @@
 ;;; Type synonyms
 
 ;;; These are synonyms for types generally recognized by LLA.  Note
-;;; that LLA works fine with any kind of numbers, but may be faster
+;;; that LLA works fine with any kind of number, but may be faster
 ;;; for array element types it recognizes as it does not have to spend
 ;;; time detecting a common type.  Think of these types as
 ;;; optimization hints when used in MAKE-ARRAY etc.

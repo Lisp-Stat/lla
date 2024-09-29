@@ -1,5 +1,7 @@
 ;;; -*- Mode: LISP; Syntax: Ansi-Common-Lisp; Base: 10; Package: LLA -*-
-;;; Copyright (c) 2023 Symbolics Pte. Ltd. All rights reserved.
+;;; Copyright Tamas Papp 2010-2011.
+;;; Copyright (c) 2023,2024 by Symbolics Pte. Ltd. All rights reserved.
+;;; SPDX-License-identifier: MS-PL
 (in-package #:lla)
 
 ;;; ********************************************************************
@@ -18,8 +20,8 @@
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (set-feature 'lla::int64 (query-configuration :int64 nil))
   (set-feature 'lla::cffi-pinning
-               (query-configuration :cffi-pinning #+sbcl nil
-                                                  #-sbcl t))
+               (query-configuration :cffi-pinning #+(or sbcl cll) nil
+                                                  #-(or sbcl ccl) t))
   (set-feature 'lla::debug (query-configuration :debug nil))
   (let+ ((efficiency-warnings (query-configuration :efficiency-warnings nil))
          ((&flet enable-efficiency-warning (feature keyword)

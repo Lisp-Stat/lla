@@ -47,3 +47,23 @@ $$A^T=(UDV^T)^T = VD^TU^T$$
 
 just uses the diagonals of decompositions, representation irrelevant
 
+
+* LLA v2
+To read:
+https://www.reddit.com/r/rust/comments/wza736/comment/im2v4e9/ - basically, use BLIS
+
+This is a good read:
+https://fml-fam.github.io/blog/2020/07/03/matrix-factorizations-for-data-analysis/,
+describing some of the trade-off in working at a high level vs a low-level of BLAS.  Here's a quote:
+
+"Pretty much all of the LAPACK matrix factorizations will do things
+like this in one way or another. At the end of the day, your input
+matrix will be modified, either to store the return or as a kind of
+temporary workspace when the original data is no longer needed. Your
+favorite LAPACK bindings (Matlab, R, Armadillo, Julia, numpy, …) will
+hide this from you by operating on a copy of the input. This is why
+operating at the level of LAPACK directly instead of a high-level
+interface can have massive performance and memory advantages,
+particularly for iterative algorithms."
+
+

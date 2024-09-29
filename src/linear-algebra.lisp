@@ -1,16 +1,19 @@
 ;;; -*- Mode: LISP; Syntax: Ansi-Common-Lisp; Base: 10; Package: LLA -*-
-;;; Copyright (c) 2023 Symbolics Pte. Ltd. All rights reserved.
+;;; Copyright (c) 2023,2024 Symbolics Pte. Ltd. All rights reserved.
+;;; SPDX-License-identifier: MS-PL
 (in-package #:lla)
 
 ;;;; Higher level linear algebra functions defined here.
 ;;;
 ;;; General convention for vectors in places of matrices: should be interpreted as a conforming vector.  If the result is an 1xn or nx1 matrix, it should be converted to a vector iff some related argument was a vector.  For example, (solve a b) should be a vector iff b is a vector, otherwise it should be a matrix.
+
+
 ;;;
 ;;;;  matrix multiplication
 ;;;
 ;;; The general matrix multiplication function is MMM.  It can be called with more than two arguments: it multiplies matrices from the left, using MM.
 ;;;
-;;; MM takes two matrices and an optional scalar.  Specialized methods may allow matrices to be replaced by symbols etc, in which case they have a special interpretation (eg T stands for "multiply matrix by conjugate transpose").
+;;; MM takes two matrices and an optional scalar.  Specialized methods may allow matrices to be replaced by symbols etc, in which case they have a special interpretation (e.g. T stands for "multiply matrix by conjugate transpose").
 ;;;
 ;;; !! Various optimizations, deferred to the future:
 ;;; - compiler macros could notice (transpose matrix)
@@ -54,6 +57,12 @@
       (&array-in a) (&integer a1) 0
       (&array-out (&new c) :dimensions c-dimensions :type common-type)
       (&integer b1))))
+
+;; For LLM work.
+(defmethod lla:mm ((a vector) (b array)) ;TODO: Implement using GEMM and a transpose ?
+  "Specialization on vector/matrix multiplication"
+  (lla:mm b a))
+
 
 ;;; !! this is how we could speed things up with compiler macros: have a
 ;;; !! compiler macro transform (MM (TRANSPOSE FOO) BAR) to (MM-TN FOO BAR),
@@ -281,7 +290,7 @@
   (let+ (((a0 a1) (array-dimensions a))
          ((&values b0 b1 &ign) (dimensions-as-matrix b :column)))
     (assert (= a0 a1 b0) () 'lla-incompatible-dimensions)
-    (lapack-call ("gesv" (common-float-type a b) x)
+    (lapack-call ("gesv" (common-float-type a b) x) ;this is the same LAPACK function numpy uses.
       (&integer a0) (&integer b1) (&array-in a :transpose? t)
       (&integer a0)
       (&work a0 +integer+)
@@ -716,7 +725,7 @@ where EPS is the machine precision.  If ABSTOL is less than or equal to zero, th
 
 See \"Computing Small Singular Values of Bidiagonal Matrices with Guaranteed High Relative Accuracy,\" by Demmel and Kahan, LAPACK Working Note #3.
 
-If high relative accuracy is important, set ABSTOL to DLAMCH( 'Safe minimum').  Doing so will guarantee that eigenvalues are computed to high relative accuracy when possible in future releases.  The current code does not make any guarantees about high relative accuracy, but furutre releases will. See J. Barlow and J. Demmel, \"Computing Accurate Eigensystems of Scaled Diagonally Dominant Matrices\", LAPACK Working Note #7, for a discussion of which matrices define their eigenvalues to high relative accuracy."
+If high relative accuracy is important, set ABSTOL to DLAMCH( 'Safe minimum').  Doing so will guarantee that eigenvalues are computed to high relative accuracy when possible in future releases.  The current code does not make any guarantees about high relative accuracy, but future releases will.  See J. Barlow and J. Demmel, \"Computing Accurate Eigensystems of Scaled Diagonally Dominant Matrices\", LAPACK Working Note #7, for a discussion of which matrices define their eigenvalues to high relative accuracy."
   (check-type a hermitian-matrix)
   (let+ ((a (wrapped-matrix-elements a))
          (type (common-float-type a))

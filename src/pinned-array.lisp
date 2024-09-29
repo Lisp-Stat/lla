@@ -1,5 +1,6 @@
 ;;; -*- Mode: LISP; Syntax: Ansi-Common-Lisp; Base: 10; Package: LLA -*-
-;;; Copyright (c) 2023 Symbolics Pte. Ltd. All rights reserved.
+;;; Copyright (c) 2023,2024 Symbolics Pte. Ltd. All rights reserved.
+;;; SPDX-License-identifier: MS-PL
 (in-package #:lla)
 
 ;;;; Interface
@@ -120,16 +121,17 @@ The value of the expression is always the value of BODY."
   (sb-c::with-array-data ((v array) (start) (end))
     (declare (ignore end))
     (values v start))
-  #-sbcl
+  #+ccl (values (ccl::array-data-and-offset array) 0)
+  #- (or sbcl ccl)
   (values array 0))
 
-#+(and sbcl (not lla::cffi-pinning))
+#+(and (or sbcl ccl) (not lla::cffi-pinning))
 (defun shareable-array? (array internal-type)
   (and (equal (upgraded-array-element-type (lisp-type internal-type))
               (array-element-type array))
        (typep array 'simple-array)))
 
-#-(and sbcl (not lla::cffi-pinning))
+#-(and (or sbcl ccl) (not lla::cffi-pinning))
 (defun shareable-array? (array internal-type)
   (declare (ignore array internal-type))
   nil)
@@ -141,8 +143,13 @@ The value of the expression is always the value of BODY."
        (let ((,pointer (sb-sys:vector-sap
                         (sb-ext:array-storage-vector ,array))))
          ,@body))))
+#+ccl
+(defmacro with-pinned-array ((pointer array) &body body)
+  (once-only (array)
+    `(ccl:with-pointer-to-ivector (,pointer ,array)
+         ,@body)))
 
-#-sbcl
+#-(or sbcl ccl)
 (defmacro with-pinned-array ((pointer array) &body body)
   (declare (ignore pointer array body))
-  `(error "Pinning is not implemented on this platform."))
+  `(error "Pinning is not implemented on ~S") (lisp-implementation-type))

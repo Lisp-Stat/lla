@@ -20,7 +20,7 @@
   <h3 align="center">LLA</h3>
 
   <p align="center">
-  A linear algebra library for Common Lisp *
+  A linear algebra library for Common Lisp
 	<br />
     <a href="https://lisp-stat.dev/docs/manuals/lla/"><strong>Explore the docs »</strong></a>
     <br />
@@ -53,7 +53,7 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#acknowledgements">Usage</a></li>
+    <li><a href="#acknowledgements">Acknowledgements</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
 	<li><a href="#resources">Resources</a></li>
     <li><a href="#contributing">Contributing</a></li>
@@ -87,7 +87,7 @@ Currently, LLA sources amount to less than 3000 lines of code (not including tes
 
 - Speed is important, but reliability comes first.
 
-Only optimize when necessary, and do extensive testing afterwards. Most of the speed comes from your LAPACK library anyway. Most linear algebra operations are $O(N^\alpha)$ with $\alpha > 1$, frequently $\alpha > 2$. That said, copying to memory is optimized, and in the long run LLA should make use of your implementation's array pinning features (when available). *Currently, direct array sharing is disabled*.
+Only optimize when necessary, and do extensive testing afterwards. Most of the speed comes from your LAPACK library anyway. Most linear algebra operations are $O(N^\alpha)$ with $\alpha > 1$, frequently $\alpha > 2$. That said, copying to memory is optimized, and in the long run LLA should make use of your implementation's array pinning features (when available).
 
 ### Built With
 
