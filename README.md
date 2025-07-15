@@ -132,15 +132,14 @@ Certain features of LLA can be configured before loading using the plist `*lla-c
 
 ## Prerequisites
 
-LLA needs BLAS and LAPACK shared libraries to work.  When it comes to loading libraries, LLA tries to pick a sensible default for each
-platform, but in case it fails, you need to tell LLA where the libraries are before loading.
+LLA needs BLAS and LAPACK shared libraries to work.  When it comes to loading libraries, LLA tries to pick a sensible default for each platform, but in case it fails, you need to tell LLA where the libraries are before loading.
 
 You can do this by putting something like this in your startup script (eg `~/.sbclrc`, the symbol needs to be in the package `cl-user`):
 
 ```lisp
-(defvar *lla-configuration*
-  '(:libraries ("/usr/lib/atlas-base/atlas/libblas.so.3gf"
-                "/usr/lib/atlas-base/libatlas.so.3gf")))
+(defparameter cl-user:*lla-configuration*
+  '(:libraries ("/usr/lib/atlas-base/atlas/libblas.so.3"
+                "/usr/lib/atlas-base/libatlas.so.3")))
 ```
 
 ### Obtaining BLAS & LAPACK libraries

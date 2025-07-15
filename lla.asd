@@ -1,13 +1,13 @@
 ;;; -*- Mode: LISP; Base: 10; Syntax: ANSI-Common-lisp; Package: CL-USER -*-
 ;;; Copyright Tamas Papp 2010-2011.
-;;; Copyright (c) 2023,2024 by Symbolics Pte. Ltd. All rights reserved.
+;;; Copyright (c) 2023-2025 by Symbolics Pte. Ltd. All rights reserved.
 ;;; SPDX-License-identifier: MS-PL
 
 (defsystem "lla"
   :description "Lisp Linear Algebra"
   :long-description  #.(uiop:read-file-string
 			(uiop:subpathname *load-pathname* "description.text"))
-  :version "0.4.0"
+  :version "0.4.1"
   :author "Steven Nunez"
   :license :ML-PL
   :depends-on (#:anaphora
