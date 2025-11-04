@@ -54,8 +54,7 @@ M --A--+  -C++
            (assert (<= (* k ldb) (array-total-size b)))))
     (assert (<= n ldc))
     (assert (<= (* m ldc) (array-total-size c)))
-    ;; here C=AB <=> C^T=B^T A^T, so in the argument list, A and B are
-    ;; interchanged
+    ;; here C=AB <=> C^T=B^T A^T, so in the argument list, A and B are interchanged
     (blas-call ("gemm" common-type c)
       (&char (if transpose-b? #\C #\N))
       (&char (if transpose-a? #\C #\N))

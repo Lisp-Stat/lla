@@ -1,5 +1,5 @@
 ;;; -*- Mode: LISP; Syntax: Ansi-Common-Lisp; Base: 10; Package: CL-USER -*-
-;;; Copyright (c) 2023 Symbolics Pte. Ltd. All rights reserved.
+;;; Copyright (c) 2023,2025 Symbolics Pte. Ltd. All rights reserved.
 
 (uiop:define-package #:lla
   (:use #:common-lisp
@@ -9,7 +9,7 @@
         #:num-utils
         #:select
         #:let-plus)
-  (:shadow #:invert)                     ; also in SELECT
+  (:shadow #:invert)                     ;also in SELECT
 
   ;; no exports from:
   ;;   configuration-interface
@@ -17,13 +17,13 @@
   ;;   libraries
   ;;   foreign-memory
   ;;   pinned-array
-  (:export                              ; types
+  (:export                              ;types
    #:lla-integer
    #:lla-single
    #:lla-double
    #:lla-complex-single
    #:lla-complex-double)
-  (:export                              ; conditions
+  (:export                              ;conditions
    #:lla-internal-error
    #:lla-unhandled-type
    #:lapack-error
@@ -36,7 +36,7 @@
    #:lla-efficiency-warning-array-type
    #:*lla-efficiency-warning-array-conversion*
    #:lla-efficiency-warning-array-conversion)
-  (:export                              ; factorizations
+  (:export                              ;factorizations
    #:lu
    #:lu-u
    #:lu-l
@@ -57,21 +57,22 @@
    #:svd-u
    #:svd-d
    #:svd-vt)
-  (:export                              ; fortran-call
+  (:export                              ;fortran-call
    #:with-fp-traps-masked)
-  (:export                              ; linear-algebra
-   #:mm
-   #:mmm
+  (:export                              ;linear-algebra
+   #:mm					;matrix multiply
+   #:mmm				;multiple matrix multiply
    #:outer
    #:solve
    #:invert
    #:least-squares
    #:invert-xx
    #:eigenvalues
-   #:logdet
-   #:det
-   #:tr)
-  (:export                              ; blas
+   #:logdet				;log determinant
+   #:det				;determinant
+   #:tr 				;trace
+   #:vm!)				;in-place vector-matrix multiplication
+  (:export                              ;blas
    #:gemm!
    #:scal!
    #:axpy!

@@ -7,7 +7,7 @@
   :description "Lisp Linear Algebra"
   :long-description  #.(uiop:read-file-string
 			(uiop:subpathname *load-pathname* "description.text"))
-  :version "0.4.1"
+  :version "0.5.0"
   :author "Steven Nunez"
   :license :ML-PL
   :depends-on (#:anaphora

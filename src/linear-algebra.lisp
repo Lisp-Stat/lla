@@ -50,18 +50,33 @@
                          ((or av bv) (* a0 b1))
                          (t (list a0 b1)))))
     (assert (= a1 b0) () "Incompatible dimensions.")
-    ;; here C=AB <=> C^T=B^T A^T, so in the argument list, A and B are
-    ;; interchanged
+    ;; here C=AB <=> C^T=B^T A^T, so in the argument list A and B are interchanged
     (blas-call ("gemm" common-type c)
       #\N #\N (&integers b1 a0 b0) 1 (&array-in b) (&integer b1)
       (&array-in a) (&integer a1) 0
       (&array-out (&new c) :dimensions c-dimensions :type common-type)
       (&integer b1))))
 
-;; For LLM work.
-(defmethod lla:mm ((a vector) (b array)) ;TODO: Implement using GEMM and a transpose ?
-  "Specialization on vector/matrix multiplication"
-  (lla:mm b a))
+(defun vm! (a b c)
+  "In-place vector-matrix multiplication: C := A * B, modifying C."
+  (let+ ((common-type (common-float-type a b))
+         (a-length (length a))
+         ((b0 b1) (array-dimensions b))
+         (c-length (length c)))
+    (assert (= a-length b1) () "Incompatible dimensions: vector length ~A doesn't match matrix columns ~A" a-length b1)
+    (assert (= c-length b0) () "Result dimension mismatch: result length ~A doesn't match matrix rows ~A" c-length b0)
+    ;; Initialize c to zeros to avoid nil values
+    ;; (fill c 0.0)
+    ;; The operation we want: c[i] = sum_j(a[j] * b[i,j])
+    ;; In BLAS terms: c = B * a (where a is treated as column vector)
+    ;; GEMV computes: y := alpha*A*x + beta*y
+    (blas-call ("gemv" common-type c)
+      #\T (&integers b1 b0) 1 (&array-in b) (&integer b1)
+      (&array-in a) (&integer 1) 0
+      (&array-in/out (:input c) (:output c))
+      (&integer 1)))
+  c)
+
 
 
 ;;; !! this is how we could speed things up with compiler macros: have a
@@ -693,8 +708,7 @@ omitting the first NRHS rows.  If MATRIX is a vector, just do this for the last 
 ;;; spectral factorization
 
 (defun eigenvalues (a &key (abstol 0))
-  "Return the eigenvalues of A.  See the documentation of
-SPECTRAL-FACTORIZATION about ABSTOL."
+  "Return the eigenvalues of A.  See the documentation of SPECTRAL-FACTORIZATION about ABSTOL."
   (check-type a hermitian-matrix)
   (let+ ((a (wrapped-matrix-elements a))
          (type (common-float-type a))
