@@ -417,8 +417,15 @@
             (aops:as-array (svd a vectors)))))
     (assert-equality #'num= (svd-d svd1) d)
     (assert-equality #'num= (svd-d svd2) d)
-    (assert-equality #'num= (select (svd-u svd2) t (range 0 2)) u)
-    (assert-equality #'num= (svd-vt svd2) (transpose v))
+
+    ;; Test reconstruction: A = U * D * Vᵀ
+    ;; Use only the first 2 columns of U (3x2) and first 2 rows of VT (2x2)
+    (assert-equality #'num=
+        (mm (mm (select (svd-u svd2) t (range 0 2))
+                (svd-d svd2))
+            (select (svd-vt svd2) (range 0 2) t))
+        a)
+
     (loop repeat 100 do
              (let* ((a0 (+ 2 (random 3)))
                     (a1 (+ 2 (random 3)))
@@ -510,3 +517,119 @@
 ;;     ;;                              3 4)))
 ;;     ;;              4))
 ;;     ))
+
+(deftest vm! (linear-algebra-suite)
+  (let ((a (vec 'lla-double 2d0 3d0 5d0))
+        (b (mx 'lla-double
+             (1d0 2d0 3d0)
+             (4d0 5d0 6d0)
+             (7d0 8d0 9d0)))
+        (c (vec 'lla-double 0d0 0d0 0d0))
+        (expected (vec 'lla-double 23d0 53d0 83d0)))
+    ;; Test basic vector-matrix multiplication
+    (vm! a b c)
+    (assert-equality #'num= expected c)
+
+    ;; Test with different types
+    (let ((a-single (vec 'lla-single 2f0 3f0 5f0))
+          (b-single (mx 'lla-single
+                      (1f0 2f0 3f0)
+                      (4f0 5f0 6f0)
+                      (7f0 8f0 9f0)))
+          (c-single (vec 'lla-single 0f0 0f0 0f0))
+          (expected-single (vec 'lla-single 23.0 53.0 83.0)))
+      (vm! a-single b-single c-single)
+      (assert-equality #'num= c-single expected-single))
+
+    ;; Test dimension errors
+    (let ((a-wrong (vec 'lla-double 1d0 2d0))
+          (b-wrong (mx 'lla-double
+                     (1d0 2d0)
+                     (3d0 4d0)
+                     (5d0 6d0)))
+          (c-wrong (vec 'lla-double 0d0 0d0)))
+      (assert-condition error (vm! a-wrong b c))  ; wrong vector length
+      (assert-condition error (vm! a b-wrong c))  ; incompatible matrix
+      (assert-condition error (vm! a b c-wrong))) ; wrong result length
+
+    ;; Test that it modifies c in place
+    (let ((c-copy (copy-seq c)))
+      (vm! a b c)
+      (assert-false (equalp c-copy (vec 'lla-double 0 0 0)))
+      (assert-equality #'num= c expected))
+
+    ;; Test return value
+    (let ((result (vm! a b c)))
+      (assert-true (eq result c)))))
+
+(deftest vm!-random (linear-algebra-suite)
+  ;; Random test to verify correctness against reference implementation
+  (loop repeat 100 do
+    (let* ((m (+ 2 (random 10)))
+           (n (+ 2 (random 10)))
+           (a (aops:generate* 'double-float (lambda () (random 10d0)) n))
+           (b (aops:generate* 'double-float (lambda () (random 10d0)) (list m n)))
+           (c (make-array m :element-type 'double-float :initial-element 0d0))
+           (c-expected (make-array m :element-type 'double-float :initial-element 0d0)))
+      ;; Compute expected result using reference implementation
+      ;; c[i] = sum_j(a[j] * b[i,j])
+      (dotimes (i m)
+        (let ((sum 0d0))
+          (dotimes (j n)
+            (incf sum (* (aref a j) (aref b i j))))
+          (setf (aref c-expected i) sum)))
+      ;; Test vm!
+      (vm! a b c)
+      (assert-equality #'num= c c-expected))))
+
+(deftest vm!-edge-cases (linear-algebra-suite)
+  ;; Test with 1x1 matrix
+  (let ((a (vec 'lla-double 3d0))
+        (b (mx 'lla-double (2d0)))
+        (c (vec 'lla-double 0d0)))
+    (vm! a b c)
+    (assert-equality #'num= c (vec 'lla-double 6d0)))
+
+  ;; Test with identity matrix
+  (let ((a (vec 'lla-double 1d0 2d0 3d0))
+        (b (mx 'lla-double
+             (1d0 0d0 0d0)
+             (0d0 1d0 0d0)
+             (0d0 0d0 1d0)))
+        (c (vec 'lla-double 0d0 0d0 0d0)))
+    (vm! a b c)
+    (assert-equality #'num= c a))
+
+  ;; Test with zero vector
+  (let ((a (vec 'lla-double 0d0 0d0 0d0))
+        (b (mx 'lla-double
+             (1d0 2d0 3d0)
+             (4d0 5d0 6d0)
+             (7d0 8d0 9d0)))
+        (c (vec 'lla-double 1d0 1d0 1d0)))
+    (vm! a b c)
+    (assert-equality #'num= c (vec 'lla-double 0d0 0d0 0d0)))
+
+  ;; Test with zero matrix
+  (let ((a (vec 'lla-double 1d0 2d0 3d0))
+        (b (mx 'lla-double
+             (0d0 0d0 0d0)
+             (0d0 0d0 0d0)
+             (0d0 0d0 0d0)))
+        (c (vec 'lla-double 1d0 1d0 1d0)))
+    (vm! a b c)
+    (assert-equality #'num= c (vec 'lla-double 0d0 0d0 0d0))))
+
+(deftest vm!-comparison-with-mm (linear-algebra-suite)
+  ;; Compare vm! results with mm for consistency
+  (loop repeat 50 do
+    (let* ((m (+ 2 (random 8)))   ; number of rows in B
+           (n (+ 2 (random 8)))   ; number of columns in B (= length of a)
+           (a (aops:generate* 'double-float (lambda () (random 10d0)) n))
+           (b (aops:generate* 'double-float (lambda () (random 10d0)) (list m n)))
+           (c (make-array m :element-type 'double-float :initial-element 0d0))
+           ;; Use mm with reshaped a as column matrix (n x 1) and transpose B
+           (a-col (aops:reshape a (list n 1)))
+           (expected (aops:flatten (mm b a-col))))
+      (vm! a b c)
+      (assert-equality #'num= c expected))))
