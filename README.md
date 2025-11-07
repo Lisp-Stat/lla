@@ -144,7 +144,163 @@ You can do this by putting something like this in your startup script (eg `~/.sb
 
 ### Obtaining BLAS & LAPACK libraries
 
-MacOS (darwin) has BLAS and LAPACK available by default.  For Linux, use your package manager.  On MS Windows, [OpenBLAS](https://github.com/xianyi/OpenBLAS) is known to work and the project provides pre-compiled binaries for MS Windows.  You can either configure your PATH environment to contain the libopenblas.dll, or set the library as above.
+MacOS (darwin) has BLAS and LAPACK available by default. For other platforms, you have several options:
+
+#### Linux Installation
+
+**Option 1: System Package Manager (Recommended for most users)**
+
+For Ubuntu/Debian:
+```bash
+sudo apt-get update
+sudo apt-get install libatlas-base-dev liblapack-dev libblas-dev
+```
+
+For RHEL/CentOS/Fedora:
+```bash
+# RHEL/CentOS
+sudo yum install atlas-devel lapack-devel blas-devel
+# Fedora
+sudo dnf install atlas-devel lapack-devel blas-devel
+```
+
+For Arch Linux:
+```bash
+sudo pacman -S blas lapack atlas-lapack
+```
+
+**Option 2: Intel MKL (High Performance)**
+
+1. Download Intel oneAPI Math Kernel Library from [Intel's website](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html)
+2. Install following Intel's instructions
+3. Source the environment setup script:
+   ```bash
+   source /opt/intel/oneapi/setvars.sh
+   ```
+4. The libraries will be automatically added to your `LD_LIBRARY_PATH`
+
+**⚠️ Important MKL Threading Warning:**
+If you're using Intel MKL, at least one of the MKL threading libraries must be available in your system's `PATH` or `LD_LIBRARY_PATH` for the MKL runtime to function properly. These threading libraries should **not** be added to the `*lla-configuration*` variable, but must be discoverable by the system when MKL loads. The required threading libraries include:
+- `libmkl_tbb_thread.so` (for TBB threading)
+- `libmkl_intel_thread.so` (for Intel OpenMP threading)
+- `libmkl_gnu_thread.so` (for GNU OpenMP threading)
+- `libmkl_sequential.so` (for sequential/single-threaded operation)
+
+These are typically located in `/opt/intel/oneapi/mkl/latest/lib/intel64/` and are automatically included when you source the Intel setvars script.
+
+**Option 3: OpenBLAS**
+```bash
+# Ubuntu/Debian
+sudo apt-get install libopenblas-dev
+# RHEL/CentOS/Fedora
+sudo yum install openblas-devel  # or dnf for Fedora
+```
+
+**Setting Library Paths for Linux:**
+
+If libraries are installed in non-standard locations, you can either:
+
+1. **Use absolute paths in configuration** (as shown in the example above):
+   ```lisp
+   (defparameter cl-user:*lla-configuration*
+     '(:libraries ("/usr/lib/atlas-base/atlas/libblas.so.3"
+                   "/usr/lib/atlas-base/libatlas.so.3")))
+   ```
+
+2. **Use library names if they're in your library path**:
+   ```lisp
+   (defparameter cl-user:*lla-configuration*
+     '(:libraries ("libblas.so.3" "liblapack.so.3")))
+   ```
+
+3. **Set LD_LIBRARY_PATH environment variable**:
+   ```bash
+   export LD_LIBRARY_PATH=/path/to/your/blas/libraries:$LD_LIBRARY_PATH
+   ```
+   Add this to your `~/.bashrc` or `~/.profile` to make it permanent.
+
+#### Windows Installation
+
+**Option 1: Intel MKL (Recommended)**
+
+1. Download and install Intel oneAPI Math Kernel Library from [Intel's website](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html)
+2. After installation, the libraries are may be located in:
+   ```
+   C:\Program Files (x86)\Intel\oneAPI\mkl\2025.3\bin
+   ```
+3. Add the library directory to your PATH environment variable:
+   - Open System Properties → Advanced → Environment Variables
+   - Edit the PATH variable and add the MKL redist directory
+   - Or use PowerShell:
+     ```powershell
+     $env:PATH += ";C:\Program Files (x86)\Intel\oneAPI\mkl\2025.3\bin"
+     ```
+
+**⚠️ Important MKL Threading Warning:**
+If you're using Intel MKL on Windows, at least one of the MKL threading libraries must be available in your `PATH` environment variable (not in the `*lla-configuration*`) for the MKL runtime to function correctly. The required threading libraries include:
+- `mkl_tbb_thread.dll` (for TBB threading)
+- `mkl_intel_thread.dll` (for Intel OpenMP threading) 
+- `mkl_sequential.dll` (for sequential/single-threaded operation)
+
+For example the TBB libraries are in:
+```
+C:\Program Files (x86)\Intel\oneAPI\tbb\2022.3\bin
+```
+The Intel oneAPI installer usually handles adding this directory to your PATH automatically when you run the environment setup script.
+
+**Option 2: OpenBLAS**
+
+1. Download pre-compiled OpenBLAS binaries from [OpenBLAS releases](https://github.com/xianyi/OpenBLAS/releases)
+2. Extract to a directory (e.g., `C:\OpenBLAS\`)
+3. Add the bin directory to your PATH:
+   ```powershell
+   $env:PATH += ";C:\OpenBLAS\bin"
+   ```
+
+**Setting Library Paths for Windows:**
+
+You can configure LLA to use libraries in several ways:
+
+1. **Use absolute paths**:
+   ```lisp
+   (defparameter cl-user:*lla-configuration*
+     '(:libraries ("C:/OpenBLAS/bin/libopenblas.dll")))
+   ```
+
+2. **Use library names if they're in PATH**:
+   ```lisp
+   (defparameter cl-user:*lla-configuration*
+     '(:libraries ("libopenblas.dll")))
+   ```
+
+3. **For Intel MKL** (if using library names):
+   ```lisp
+   (defparameter cl-user:*lla-configuration*
+     '(:libraries ("mkl_rt.dll")))
+   ```
+
+**Note:** On Windows, you can either configure your PATH environment variable to contain the directory with the DLL files, or specify the full absolute path to the libraries in your LLA configuration as shown above.
+
+#### Verifying Installation
+
+To verify your BLAS/LAPACK installation works correctly:
+
+1. Start your Common Lisp implementation
+2. Try loading LLA:
+   ```lisp
+   (asdf:load-system :lla)
+   ```
+3. If successful, test basic functionality:
+   ```lisp
+   (lla:mm #2A((1 2) (3 4)) #2A((5 6) (7 8)))
+   ```
+
+If you encounter library loading errors, check that:
+- The library files exist at the specified paths
+- The libraries are compatible with your system architecture (32-bit vs 64-bit)
+- All dependencies are installed
+- PATH or LD_LIBRARY_PATH includes the library directories
+- **For Intel MKL users**: At least one MKL threading library is available in PATH/LD_LIBRARY_PATH (but not in `*lla-configuration*`)
 
 ## Installation
 
