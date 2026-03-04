@@ -260,7 +260,7 @@ PARAMETERS is used to specify information that is applicable for all arguments (
 (defmacro &array-in/out ((&key input
                                ((:type input-type))
                                ((:transpose? input-transpose?))
-                               ((::force-copy? input-force-copy?) nil
+                               ((:force-copy? input-force-copy?) nil
                                 input-force-copy?-specified?))
                          (&key (output input)
                                ((:dimensions output-dimensions))
