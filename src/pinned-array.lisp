@@ -121,7 +121,9 @@ The value of the expression is always the value of BODY."
   (sb-c::with-array-data ((v array) (start) (end))
     (declare (ignore end))
     (values v start))
-  #+ccl (values (ccl::array-data-and-offset array) 0)
+  ;; Return both values: the second is the displacement offset.  Dropping it
+  ;; passed displaced arrays to foreign code from the start of the base vector.
+  #+ccl (ccl::array-data-and-offset array)
   #- (or sbcl ccl)
   (values array 0))
 
