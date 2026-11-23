@@ -388,3 +388,8 @@ Project Link: [https://github.com/lisp-stat/lla](https://github.com/lisp-stat/ll
 If you are using Emacs with slime on MS Windows, there is a [bug](https://github.com/slime/slime/issues/756) in slime where trying to load a shared library using CFFI will hang slime.  The workaround is to switch to the `*inferior-lisp*` emacs buffer and press enter once or twice.  After than, slime will unhang and CFFI will continue to load the BLAS libraries.
 
 
+
+### Complex double-float results are wrong on CCL 1.14 and earlier
+On x86-64 and ARM64, Clozure CL stores a `(simple-array (complex double-float) (*))` with a 64-bit pad before the first element. `ccl:with-pointer-to-ivector` returns the address of that pad instead of the first element, contrary to its documentation. LLA passes arrays to BLAS and LAPACK through that pointer without copying, so on CCL every operation on complex double-float arrays reads and writes data shifted by one double, and gives wrong results.
+
+This is a bug in CCL, not in LLA, and LLA deliberately does not work around it. The fix has been submitted to CCL as [Clozure/ccl#737](https://github.com/Clozure/ccl/pull/737). Until a CCL release includes it, either build CCL from source with that fix or avoid complex double-float arrays with LLA on CCL. SBCL, and the other element types on CCL (single-float, double-float and complex single-float), are not affected.
