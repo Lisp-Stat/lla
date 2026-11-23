@@ -265,3 +265,29 @@
   (test-vector-output lla::+double+)
   (test-vector-output lla::+complex-single+)
   (test-vector-output lla::+complex-double+))
+
+;;;; Displaced arrays must be passed to foreign code starting at their
+;;;; displacement offset, not at the start of the underlying vector.
+
+(deftest displaced-vector-dot (pinned-array-suite)
+  (let* ((base (make-array 6 :element-type 'double-float
+                             :initial-contents '(100d0 200d0 1d0 2d0 3d0 400d0)))
+         (x (make-array 3 :element-type 'double-float
+                          :displaced-to base :displaced-index-offset 2))
+         (y (make-array 3 :element-type 'double-float
+                          :initial-contents '(1d0 10d0 100d0))))
+    ;; 1*1 + 2*10 + 3*100
+    (assert-equalp 321d0 (dot x y))
+    (assert-equalp 321d0 (dot y x))))
+
+(deftest displaced-matrix-mm (pinned-array-suite)
+  (let* ((base (make-array 7 :element-type 'double-float
+                             :initial-contents '(100d0 200d0 1d0 2d0 3d0 4d0 300d0)))
+         (a (make-array '(2 2) :element-type 'double-float
+                               :displaced-to base :displaced-index-offset 2))
+         (i (make-array '(2 2) :element-type 'double-float
+                               :initial-contents '((1d0 1d0) (0d0 1d0)))))
+    ;; a = [[1 2][3 4]], a*i = [[1 3][3 7]]
+    (assert-equalp #2A((1d0 3d0) (3d0 7d0)) (mm a i))
+    ;; i*a = [[4 6][3 4]]
+    (assert-equalp #2A((4d0 6d0) (3d0 4d0)) (mm i a))))
