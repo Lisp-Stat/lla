@@ -147,7 +147,14 @@ The value of the expression is always the value of BODY."
 (defmacro with-pinned-array ((pointer array) &body body)
   (once-only (array)
     `(ccl:with-pointer-to-ivector (,pointer ,array)
-         ,@body)))
+       ;; CCL stores (simple-array (complex double-float) (*)) with a
+       ;; 64-bit pad before the first element (see "There's a 64-bit pad at
+       ;; the beginning of the vector" in level-0/l0-array.lisp), and
+       ;; WITH-POINTER-TO-IVECTOR returns the address of the pad, not of the
+       ;; data.  Skip it so that POINTER addresses the first element.
+       (when (typep ,array '(simple-array (complex double-float) (*)))
+         (setf ,pointer (ccl:%inc-ptr ,pointer 8)))
+       ,@body)))
 
 #-(or sbcl ccl)
 (defmacro with-pinned-array ((pointer array) &body body)

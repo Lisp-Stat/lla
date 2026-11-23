@@ -27,6 +27,25 @@
     ;; (assert-condition error (mm b3 b3))
     (assert-condition error (mm b2 b3))))
 
+(deftest mm-complex-double (linear-algebra-suite)
+  ;; Regression test: complex double arrays are passed to BLAS through the
+  ;; zero-copy (pinned) path.  On CCL, such vectors have a 64-bit pad before
+  ;; the first element, which must be skipped when taking the pointer.
+  ;; Expected values are computed by hand.
+  (let ((a (mx 'lla-complex-double
+             (#C(1 1) 2)
+             (3 #C(4 -1))))
+        (b (mx 'lla-complex-double
+             (1 #C(0 1))
+             (#C(2 -1) #C(1 1))))
+        (v (vec 'lla-complex-double 1 #C(0 1))))
+    (assert-equality #'num= (mm a b)
+        (mx 'lla-complex-double
+          (#C(5 -1) #C(1 3))
+          (#C(10 -6) #C(5 6))))
+    (assert-equality #'num= (mm a v)
+        (vec 'lla-complex-double #C(1 3) #C(4 4)))))
+
 (deftest mm-dot (linear-algebra-suite)
   (let+ ((a (vec 'lla-double 2 3 5))
          (b (vec 'lla-complex-double 1 #C(2 1) 3))
